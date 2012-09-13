@@ -1,0 +1,11 @@
+<div class="page-header">
+    <h1>New volume</h1>
+</div>
+
+<% form_for(volume, {action: path_to.volumes(), method: 'POST', id: "volume_form", class: 'form-horizontal'}, function (form) { %>
+    <%- partial('volumes/form.ejs', {locals: {form: form, volume: volume}}) %>
+    <div class="form-actions">
+        <%- form.submit('<i class="icon-ok icon-white"></i> Create volume', {class: 'btn btn-primary'}) %> or
+        <%- link_to('Cancel', path_to.volumes(), {class: 'btn'}) %>
+    </div>
+<% });%>

@@ -1,4 +1,2 @@
-getperiodic
-===========
-
-boilerplate node social aggregator
+periodic
+========

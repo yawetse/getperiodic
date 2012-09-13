@@ -1,0 +1,21 @@
+<div class="page-header">
+    <h1>Details of volume</h1>
+</div>
+
+
+<table class="table table-bordered">
+    <tbody>
+        <tr><th>title</th><td><%= volume.title %></td></tr>
+        <tr><th>description</th><td><%= volume.description %></td></tr>
+        <tr><th>createdAt</th><td><%= volume.createdAt %></td></tr>
+        <tr><th>periodicalid</th><td><%= volume.periodicalid %></td></tr>
+        <tr><th>options</th><td><%= volume.options %></td></tr>    
+    </tbody>
+</table>
+
+<div class="well">
+    <%- link_to('<i class="icon-edit icon-white"></i> Edit', path_to.edit_volume(volume), {class: 'btn btn-primary'}) %>
+    <%- link_to('<i class="icon-remove icon-white"></i> Delete', path_to.volume(volume), {class: 'btn btn-danger', method: 'delete', remote: true, jsonp: '(function (u) { location.href = u; })'}) %>
+    or
+    <%- link_to('Back to index', path_to.volumes()) %>
+</div>
