@@ -1,6 +1,5 @@
 { "development":
-  { "driver":   "mongoose"
-  , "url":      "mongodb://localhost/pregame"
+  { "driver":   "memory"
   }
 , "test":
   { "driver":   "memory"
