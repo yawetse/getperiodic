@@ -34,3 +34,7 @@ nbproject
 .CVS
 .idea
 node_modules
+
+#app environment settings
+config/database.json
+config/passport.yml

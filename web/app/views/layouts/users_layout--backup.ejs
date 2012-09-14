@@ -11,19 +11,10 @@
             <div class="navbar-inner">
                 <div class="container">
                     <a class="brand" href="#">Project name</a>
-                    <ul class="nav">
-                        <li class="active"><a href="/">Home</a></li>
-                        <li><a href="/users">users</a></li>
-                        <li><a href="/periodicals">periodicals</a></li>
-                        <li><a href="/volumes">volumes</a></li>
-                        <li><a href="/auth/twitter">Sign in with twitter</a></li>
-                        <li><a href="/auth/facebook">Sign in with facebook</a></li>
-                        <li><a href="/logout">logout  </a></li>
-                    </ul>
                 </div>
             </div>
         </div>
-    
+            
         <div class="container">
             <% var flash = request.flash('info').pop(); if (flash) { %>
                 <div class="alert alert-info">

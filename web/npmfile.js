@@ -10,4 +10,5 @@ require('passport-instagram');
 require('passport-local');
 require('passport-soundcloud');
 require('passport-twitter');
+require('feedparser');
 
