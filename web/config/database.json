@@ -1,5 +1,6 @@
 { "development":
-  { "driver":   "memory"
+  { "driver":   "mongoose"
+  , "url":      "mongodb://localhost/getperiodic"
   }
 , "test":
   { "driver":   "memory"
