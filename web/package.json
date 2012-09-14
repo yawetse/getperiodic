@@ -1,8 +1,13 @@
-{ "name": "web"
-, "version": "0.0.1"
-, "engines": ["node >= 0.4.0"]
-, "main": "server.js"
-, "dependencies":
+{ "name": "getperiodic", 
+  "version": "0.0.1",
+  "author": "Yaw Joseph Etse",
+  "description": "GetPeriodic",
+  "keywords": ["periodic", "web-framework", "social-aggregator", "ruby-on-rails", "express", "railway"],
+  "homepage": "http://getperiodic.com",
+  "url": "http://railwayjs.com",
+  "engines": ["node >= 0.4.0"], 
+  "main": "server.js", 
+  "dependencies":
   { "ejs":              "*"
   , "ejs-ext":          "*"
   , "express":          "~2.x"
@@ -10,12 +15,16 @@
   , "jugglingdb":       ">= 0.1.0"
   , "coffee-script":    ">= 1.1.1"
   },
-  "devDependencies":
-  { "nodeunit":         "*"
-  , "sinon":            "*"
-  , "semicov":          "*"
-  }
-, "scripts":
-  { "test": "nodeunit test/*/*"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yawetse/getperiodic.git"
+  },
+  "devDependencies": { 
+    "nodeunit":         "*",
+    "sinon":            "*",
+    "semicov":          "*"
+  },
+ "scripts": { 
+    "test": "nodeunit test/*/*"
   }
 }
