@@ -1,31 +1,31 @@
 load('application');
 
-before(loadPeriodicalmembers, {only: ['show', 'edit', 'update', 'destroy']});
+before(loadPeriodicalmember, {only: ['show', 'edit', 'update', 'destroy']});
 
 action('new', function () {
-    this.title = 'New periodicalmembers';
-    this.periodicalmembers = new Periodicalmembers;
+    this.title = 'New periodicalmember';
+    this.periodicalmember = new Periodicalmember;
     render();
 });
 
 action(function create() {
-    Periodicalmembers.create(req.body.Periodicalmembers, function (err, periodicalmembers) {
+    Periodicalmember.create(req.body.Periodicalmember, function (err, periodicalmember) {
         if (err) {
-            flash('error', 'Periodicalmembers can not be created');
+            flash('error', 'Periodicalmember can not be created');
             render('new', {
-                periodicalmembers: periodicalmembers,
-                title: 'New periodicalmembers'
+                periodicalmember: periodicalmember,
+                title: 'New periodicalmember'
             });
         } else {
-            flash('info', 'Periodicalmembers created');
+            flash('info', 'Periodicalmember created');
             redirect(path_to.periodicalmembers());
         }
     });
 });
 
 action(function index() {
-    this.title = 'Periodicalmemberss index';
-    Periodicalmembers.all(function (err, periodicalmembers) {
+    this.title = 'Periodicalmembers index';
+    Periodicalmember.all(function (err, periodicalmembers) {
         render({
             periodicalmembers: periodicalmembers
         });
@@ -33,45 +33,45 @@ action(function index() {
 });
 
 action(function show() {
-    this.title = 'Periodicalmembers show';
+    this.title = 'Periodicalmember show';
     render();
 });
 
 action(function edit() {
-    this.title = 'Periodicalmembers edit';
+    this.title = 'Periodicalmember edit';
     render();
 });
 
 action(function update() {
-    this.periodicalmembers.updateAttributes(body.Periodicalmembers, function (err) {
+    this.periodicalmember.updateAttributes(body.Periodicalmember, function (err) {
         if (!err) {
-            flash('info', 'Periodicalmembers updated');
-            redirect(path_to.periodicalmembers(this.periodicalmembers));
+            flash('info', 'Periodicalmember updated');
+            redirect(path_to.periodicalmember(this.periodicalmember));
         } else {
-            flash('error', 'Periodicalmembers can not be updated');
-            this.title = 'Edit periodicalmembers details';
+            flash('error', 'Periodicalmember can not be updated');
+            this.title = 'Edit periodicalmember details';
             render('edit');
         }
     }.bind(this));
 });
 
 action(function destroy() {
-    this.periodicalmembers.destroy(function (error) {
+    this.periodicalmember.destroy(function (error) {
         if (error) {
-            flash('error', 'Can not destroy periodicalmembers');
+            flash('error', 'Can not destroy periodicalmember');
         } else {
-            flash('info', 'Periodicalmembers successfully removed');
+            flash('info', 'Periodicalmember successfully removed');
         }
         send("'" + path_to.periodicalmembers() + "'");
     });
 });
 
-function loadPeriodicalmembers() {
-    Periodicalmembers.find(params.id, function (err, periodicalmembers) {
-        if (err || !periodicalmembers) {
+function loadPeriodicalmember() {
+    Periodicalmember.find(params.id, function (err, periodicalmember) {
+        if (err || !periodicalmember) {
             redirect(path_to.periodicalmembers());
         } else {
-            this.periodicalmembers = periodicalmembers;
+            this.periodicalmember = periodicalmember;
             next();
         }
     }.bind(this));

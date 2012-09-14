@@ -1,10 +1,10 @@
 <div class="page-header">
-    <h1>Index of periodicalmembers</h1>
+    <h1>Index of periodicalmember</h1>
 </div>
 
 <div class="row">
     <div class="span12">
-        <p><%- link_to('<i class="icon-plus icon-white"></i> New periodicalmembers', path_to.new_periodicalmembers(), {class: 'btn btn-primary'}) %></>
+        <p><%- link_to('<i class="icon-plus icon-white"></i> New periodicalmember', path_to.new_periodicalmember(), {class: 'btn btn-primary'}) %></>
     </div>
 </div>
 
@@ -19,12 +19,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% periodicalmembers.forEach(function (periodicalmembers) { %>
+                    <% periodicalmembers.forEach(function (periodicalmember) { %>
                         <tr>
-                            <td><strong><%- link_to('periodicalmembers #' + periodicalmembers.id, path_to.periodicalmembers(periodicalmembers)) %></strong></td>
+                            <td><strong><%- link_to('periodicalmember #' + periodicalmember.id, path_to.periodicalmember(periodicalmember)) %></strong></td>
                             <td>
-                                <%- link_to('<i class="icon-edit"></i> Edit', path_to.edit_periodicalmembers(periodicalmembers), {class: 'btn btn-mini'}) %>
-                                <%- link_to('<i class="icon-remove icon-white"></i> Delete', path_to.periodicalmembers(periodicalmembers), {class: 'btn btn-mini btn-danger', method: 'delete', remote: true, jsonp: '(function (u) {location.href = u;})'}) %>        
+                                <%- link_to('<i class="icon-edit"></i> Edit', path_to.edit_periodicalmember(periodicalmember), {class: 'btn btn-mini'}) %>
+                                <%- link_to('<i class="icon-remove icon-white"></i> Delete', path_to.periodicalmember(periodicalmember), {class: 'btn btn-mini btn-danger', method: 'delete', remote: true, jsonp: '(function (u) {location.href = u;})'}) %>        
                             </td>
                         </tr>
                     <% }); %>        
