@@ -32,6 +32,7 @@ var User = describe('User', function () {
     property('activated', Boolean, {default:false});
     property('accounttype', String);
     property('description', String);
+    property('url', String);
     property('image', String);
     property('image_https', String);
     property('twitterAccessToken', String);

@@ -10,7 +10,11 @@ function user_auth(){
 		session.user = req.user;
 		this.user_auth.data = session.user;
 	}
+
 	this.user_auth.loggedIn = (session.user) ? true : false;
+	if(!this.user_auth.loggedIn){
+		req.session.redirect = req.url; // to send the user back to the same page after they log in
+	}
 	next();
 }
 function get_periodic_settings(){
@@ -18,5 +22,6 @@ function get_periodic_settings(){
 		"name":"GetPeriodic", // "userauth":session.auth
 		"page_title":"GetPeriodic - Reading is fun" // "userauth":session.auth
 	};
+	this.title = this.get_periodic_settings.page_title;
 	next();
 }
