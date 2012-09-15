@@ -34,9 +34,9 @@ action('instagram', function () {
 
 action('login', function () {
     // console.log(response)
-    console.log(req)
+    // console.log(req)
     render({
-        title: "auth#login"
+        // title: "auth#login"
     });
 });
 action('logout', function () {

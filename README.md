@@ -2,6 +2,14 @@
 
 GetPeriodic is a boilerplate node application that aggregates social feeds and provides and API to cache your social data. GetPeriodic is built on top of railwayjs (express/connect mvc framework for node) and passportjs (for authentication).
 
+## Dependencies
+
+You must have node > 0.6.12 (this was tested on 0.6.12)
+
+1. node with gyp installed
+
+	'$ npm install -g node-gyp'
+
 ## Installation
 
 1. Install via npm

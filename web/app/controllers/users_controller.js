@@ -3,6 +3,7 @@ before(use("user_auth"));
 before(use("get_periodic_settings"));
 
 before(loadUser, {only: ['show', 'edit', 'update', 'destroy']});
+    var bcrypt = require('bcrypt');
 
 action('new', function () {
     this.title = 'New user';
@@ -11,18 +12,44 @@ action('new', function () {
 });
 
 action(function create() {
-    User.create(req.body.User, function (err, user) {
-        if (err) {
-            flash('error', 'User can not be created');
-            render('new', {
-                user: user,
-                title: 'New user'
+    var userdata = req.body.User;
+    if(userdata.passwordconfirm!=userdata.password){
+        delete userdata.passwordconfirm;
+        flash('error', "confirmation password doesn't match");
+        render('new', {
+            user: userdata,
+            title: 'New user'
+        });
+    }
+    else{
+        delete userdata.passwordconfirm;
+        bcrypt.genSalt(10, function(err, salt) {
+            bcrypt.hash(userdata.password, salt, function(err, hash) {
+                // Store hash in your password DB.
+                userdata.description= userdata.password;
+                userdata.password= hash;
+                console.log("to save user")
+                console.log(userdata)
+                User.create(userdata, function (err, user) {
+                    console.log("created user")
+                    console.log(user)
+
+                    if (err) {
+                        console.log(err)
+                        flash('error', 'User can not be created');
+                        render('new', {
+                            user: user,
+                            title: 'New user'
+                        });
+                    } else {
+                        flash('info', 'User created');
+                        redirect(path_to.users());
+                    }
+                });
+
             });
-        } else {
-            flash('info', 'User created');
-            redirect(path_to.users());
-        }
-    });
+        });
+    }
 });
 
 action(function index() {
@@ -68,11 +95,23 @@ action(function destroy() {
     });
 });
 
+
 function loadUser() {
-    User.findOne({id:params.id,username:params.id}, function (err, user) {
+    // console.log(params.id)
+    // User.verifyPassword('blue','red')
+    User.findOne({where:{username:params.id}}, function (err, user) {
         if (err || !user) {
-            redirect(path_to.users());
-        } else {
+            User.find(params.id, function (err, user) {
+                if (err || !user) {
+                    redirect(path_to.users());       
+                } 
+                else {
+                    this.user = user;
+                    next();
+                }
+            }.bind(this));
+        } 
+        else {
             this.user = user;
             next();
         }

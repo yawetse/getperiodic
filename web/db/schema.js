@@ -30,7 +30,7 @@ var User = describe('User', function () {
     property('createdAt', Date, {default: function () { return new Date() }});
     property('updatedAt', Date, {default: function () { return new Date() }});
     property('activated', Boolean, {default:false});
-    property('accounttype', String);
+    property('accounttype', String, {default:"regular"});
     property('description', String);
     property('url', String);
     property('image', String);

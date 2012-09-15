@@ -3,6 +3,8 @@ require('jugglingdb');
 require('seedjs');
 require('nodemailer');
 require('mongodb');
+require('node-gyp');
+require('bcrypt');
 require('passport');
 require('passport-facebook');
 require('passport-github');

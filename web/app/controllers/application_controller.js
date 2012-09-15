@@ -13,7 +13,7 @@ function user_auth(){
 
 	this.user_auth.loggedIn = (session.user) ? true : false;
 	if(!this.user_auth.loggedIn){
-		req.session.redirect = req.url; // to send the user back to the same page after they log in
+		req.session.redirect = (req.url != '/login') ? req.url : '/dashboard'; // to send the user back to the same page after they log in
 	}
 	next();
 }
