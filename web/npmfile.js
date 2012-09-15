@@ -2,7 +2,7 @@ require('ejs-ext');
 require('jugglingdb');
 require('seedjs');
 require('nodemailer');
-require('mongoose');
+require('mongodb');
 require('passport');
 require('passport-facebook');
 require('passport-github');

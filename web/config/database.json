@@ -1,5 +1,5 @@
 { "development":
-  { "driver":   "mongoose"
+  { "driver":   "mongodb"
   , "url":      "mongodb://localhost/getperiodic"
   }
 , "test":
