@@ -37,11 +37,11 @@ var User = describe('User', function () {
     property('twitterAccessToken', String);
     property('twitterAccessTokenSecret', String);
     property('twitterUsername', String);
-    property('twitterId', String);
+    property('twitterId', String, { index: true });
     property('facebookAccessToken', String);
-    property('facebookAccessTokenSecret', String);
+    // property('facebookAccessTokenSecret', String);
     property('facebookUsername', String);
-    property('facebookId', String);
+    property('facebookId', String, { index: true });
 });var Post = describe('Post', function () {
     property('title', String);
     property('content', String);

@@ -1,27 +1,6 @@
-// var passport = require('passport'),
-//     auth_config = require('../../config/auth_config'),
-//     FacebookStrategy = require('passport-facebook').Strategy;
+before(use("user_auth"));
+before(use("get_periodic_settings"));
 load('application');
-
-
-// passport.use(new FacebookStrategy({
-//     clientID: auth_config.fb.appId,
-//     clientSecret: auth_config.fb.appSecret,
-//     callbackURL: auth_config.fb.appCallbackURL
-//   },
-//   function(accessToken, refreshToken, profile, done) {
-//     console.info("accessToken")
-//     console.info(accessToken)        
-//     console.info("refreshToken")
-//     console.info(refreshToken)        
-//     console.info("profile")
-//     console.info(profile)
-//     User.findOrCreate({id:userId}, function (err, user) {
-//       if (err) { return done(err); }
-//       done(null, user);
-//     });
-//   }
-));
 
 
 action('twitter', function () {
@@ -55,9 +34,19 @@ action('instagram', function () {
 
 action('login', function () {
     // console.log(response)
+    console.log(req)
     render({
         title: "auth#login"
     });
+});
+action('logout', function () {
+    // console.log(response)
+    // console.log(req)
+    // render({
+    //     title: "auth#login"
+    // });
+    req.logOut();
+    res.redirect('/');
 });
 
 action('tumblr', function () {

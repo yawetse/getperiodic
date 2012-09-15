@@ -5,10 +5,16 @@ exports.routes = function (map) {
 	    periodical.resources('volumes');
 	});
     map.resources('posts');
-    map.resources('users');
+    map.resources('volumes');
+    map.resources('users',{path:'authors'});
 
     // Auth routes
     map.get('login', 'auth#login');
+    map.get('logout', 'auth#logout');
+
+    // home routes
+    map.get('dashboard', 'home#dashboard');
+    map.get('welcome', 'home#welcome');
 
     // Index route
     map.root('home#index')

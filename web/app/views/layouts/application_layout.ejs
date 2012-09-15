@@ -10,15 +10,24 @@
         <div class="navbar">
             <div class="navbar-inner">
                 <div class="container">
-                    <a class="brand" href="#">Project name</a>
+                    <a class="brand" href="<%- path_to.root() %>"><%- get_periodic_settings.name %></a>
                     <ul class="nav">
-                        <li class="active"><a href="/">Home</a></li>
-                        <li><a href="/users">users</a></li>
-                        <li><a href="/periodicals">periodicals</a></li>
-                        <li><a href="/volumes">volumes</a></li>
-                        <li><a href="/auth/twitter">Sign in with twitter</a></li>
-                        <li><a href="/auth/facebook">Sign in with facebook</a></li>
-                        <li><a href="/logout">logout  </a></li>
+
+                        <li><%-  link_to("Periodicals",path_to.periodicals())  %></li>
+                        <li><%-  link_to("Volumes",path_to.volumes())  %></li>
+                        <li><%-  link_to("Authors",path_to.users())  %></li>
+
+                        <% 
+                        if(!user_auth.loggedIn) { %>
+                            <li><a href="/auth/twitter">Sign in with twitter</a></li>
+                            <li><a href="/auth/facebook">Sign in with facebook</a></li>
+                        <%} 
+                        else {%>
+                            <li><%-  link_to("Profile",path_to.users()+'/'+user_auth.data.id)  %></li>
+
+                            <li><a href="/logout">logout (<%- user_auth.data.username %>) </a></li>
+                        <% } 
+                        %> 
                     </ul>
                 </div>
             </div>

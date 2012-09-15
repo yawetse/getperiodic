@@ -1,4 +1,6 @@
 load('application');
+before(use("user_auth"));
+before(use("get_periodic_settings"));
 
 before(loadPeriodicalmember, {only: ['show', 'edit', 'update', 'destroy']});
 
