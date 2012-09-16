@@ -1,0 +1,15 @@
+	<div class="row" style="text-align:center">
+		<a href="/connect/facebook" class="btn btn-large <% if(user_auth.data.facebookId){%> disabled btn-success <%} else{%> btn-primary  <%} %>">facebook</a>
+		<a href="/connect/twitter" class="btn btn-large <% if(user_auth.data.twitterId){%> disabled btn-success <%} else{%> btn-info  <%} %>">twitter</a>
+		<a href="/connect/tumblr" class="btn btn-large <% if(user_auth.data.tumblrUsername){%> disabled btn-success <%} else{%>   <%} %>">tumblr</a>
+		<a href="/connect/instagram" class="btn btn-large <% if(user_auth.data.instagramId){%> disabled btn-success <%} else{%>  btn-success <%} %>">instagram</a>
+		<a href="/connect/soundcloud" class="btn btn-large <% if(user_auth.data.soundcloudId){%> disabled btn-success <%} else{%>  btn-warning <%} %>">soundcloud</a>
+		<a href="/connect/github" class="btn btn-large <% if(user_auth.data.githubId){%> disabled btn-success <%} else{%>  btn-inverse <%} %>">github</a>
+	</div>
+	<script>
+		$(function(){
+			$('.disabled').click(function(e){
+				return false;
+			}).attr({'title':'account is connected','href':'#connectedaccount'}).append('<i class="icon-ok icon-white"></i>')
+		})
+	</script>
