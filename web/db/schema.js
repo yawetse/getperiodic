@@ -50,8 +50,9 @@ var User = describe('User', function () {
     property('githubId', String);
     property('githubUsername', String);
     property('githubAccessToken', String);
-    property('tumblrId', String);
+    property('tumblrUsername', String);
     property('tumblrAccessToken', String);
+    property('tumblrAccessTokenSecret', String);
 });var Post = describe('Post', function () {
     property('title', String);
     property('content', String);
