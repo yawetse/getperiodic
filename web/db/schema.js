@@ -40,9 +40,11 @@ var User = describe('User', function () {
     property('twitterUsername', String);
     property('twitterId', String, { index: true });
     property('facebookAccessToken', String);
-    // property('facebookAccessTokenSecret', String);
     property('facebookUsername', String);
     property('facebookId', String, { index: true });
+    property('soundcloudId', String);
+    property('soundcloudAccessToken', String);
+    property('soundcloudAccessTokenSecret', String);
 });var Post = describe('Post', function () {
     property('title', String);
     property('content', String);

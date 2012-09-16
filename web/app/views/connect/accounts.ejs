@@ -1,15 +1,5 @@
 <div class="page-header"><h1>Connected Accounts</h1></div>
-<div class="row">
-	<div class="span12" style="text-align:center">
-		<%	
-		if(user_auth.loggedIn){
-			
-
-			if(user_auth.data.twitterId){
-				console.log("connected twitter")
-			}
-		}
-		%>
+	<div class="row" style="text-align:center">
 		<a href="/connect/facebook" class="btn btn-large <% if(user_auth.data.facebookId){%> disabled <%} else{%> btn-primary  <%} %>">facebook</a>
 		<a href="/connect/twitter" class="btn btn-large <% if(user_auth.data.twitterId){%> disabled <%} else{%> btn-info  <%} %>">twitter</a>
 		<a href="/connect/tumblr" class="btn btn-large <% if(user_auth.data.tumblrId){%> disabled <%} else{%>   <%} %>">tumblr</a>
