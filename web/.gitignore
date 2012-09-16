@@ -33,7 +33,15 @@ nbproject
 .svn
 .CVS
 .idea
-node_modules
+
+node_modules/*
+!node_modules/railway-passport
+
+node_modudles/railway-passport/*
+!node_modules/railway-passport/lib
+
+node_modudles/railway-passport/lib
+!node_modules/railway-passport/lib/strategies
 
 #app environment settings
 config/database.json
