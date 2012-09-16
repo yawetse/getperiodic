@@ -7,30 +7,58 @@
         <%- csrf_meta_tag() %>
     </head>
     <body>
-        <div class="navbar">
+        <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
+                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                     <a class="brand" href="<%- path_to.root() %>"><%- get_periodic_settings.name %></a>
-                    <ul class="nav">
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            <li><%-  link_to("Periodicals",path_to.periodicals())  %></li>
+                            <li><%-  link_to("Volumes",path_to.volumes())  %></li>
+                            <li><%-  link_to("Issues",path_to.posts())  %></li>
+                            <li><%-  link_to("Authors",path_to.users())  %></li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            <% 
+                            if(!user_auth.loggedIn) { %>
+                                <li>
+                                    <div class="btn-group">
+                                        <a href="/login" class="btn btn-info">Login</a>
+                                        <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/login">Login</a></li>
+                                            <li><a href="/auth/twitter">Sign in with twitter</a></li>
+                                            <li><a href="/auth/facebook">Sign in with facebook</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="/register" style="color:#fff"><strong class="label label-primary">Create a new account</strong></a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            <%} 
+                            else {%>
+                                <li>
+                                    <div class="btn-group">
+                                        <% displayname = (user_auth.data.username) ? user_auth.data.username : "You"  %>
+                                        <a href="<%- path_to.users()+'/'+user_auth.data.id %>" class="btn btn-info"><%- displayname %></a>
+                                        <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/settings">Settings</a></li>
+                                            <li><%-  link_to("Profile",path_to.users()+'/'+user_auth.data.id)  %></li>
+                                            <li class="divider"></li>
+                                            <li><a href="/logout">logout</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            <% } 
+                            %> 
 
-                        <li><%-  link_to("Periodicals",path_to.periodicals())  %></li>
-                        <li><%-  link_to("Volumes",path_to.volumes())  %></li>
-                        <li><%-  link_to("Issues",path_to.posts())  %></li>
-                        <li><%-  link_to("Authors",path_to.users())  %></li>
-
-                        <% 
-                        if(!user_auth.loggedIn) { %>
-                            <li><a href="/login">Login</a></li>
-                            <li><a href="/auth/twitter">Sign in with twitter</a></li>
-                            <li><a href="/auth/facebook">Sign in with facebook</a></li>
-                        <%} 
-                        else {%>
-                            <li><%-  link_to("Profile",path_to.users()+'/'+user_auth.data.id)  %></li>
-
-                            <li><a href="/logout">logout (<%- user_auth.data.username %>) </a></li>
-                        <% } 
-                        %> 
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

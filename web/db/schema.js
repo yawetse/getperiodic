@@ -57,7 +57,9 @@ var User = describe('User', function () {
     property('name', String,{index:true,limit:150});
     property('description', String);
     property('createdAt', Date, {default: function () { return new Date() }});
+    property('updatedAt', Date, {default: function () { return new Date() }});
     property('config', String);
+    property('userid', String);
 });var Periodicalmembers = describe('Periodicalmembers', function () {
     property('periodicalid', Number);
     property('userid', Number);
@@ -67,6 +69,7 @@ var User = describe('User', function () {
     property('name', String,{index:true,limit:150});
     property('description', String);
     property('createdAt', Date, {default: function () { return new Date() }});
+    property('updatedAt', Date, {default: function () { return new Date() }});
     property('periodicalid', Number);
     property('config', String);
 });var Periodicalmember = describe('Periodicalmember', function () {

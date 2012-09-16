@@ -6,20 +6,20 @@
    </div>
 </div>
 <div class="control-group">
+   <%- form.label("username", false, {class: "control-label"}) %>
+   <div class="controls">
+       <%- form.input("username") %>
+   </div>
+</div>
+<div class="control-group">
    <%- form.label("firstname", false, {class: "control-label"}) %>
    <div class="controls">
-       <%- form.input("firstname") %>
+       <%- form.input("firstname") %> <span class="label">optional</span>
    </div>
 </div>
 <div class="control-group">
    <%- form.label("lastname", false, {class: "control-label"}) %>
    <div class="controls">
-       <%- form.input("lastname") %>
-   </div>
-</div>
-<div class="control-group">
-   <%- form.label("username", false, {class: "control-label"}) %>
-   <div class="controls">
-       <%- form.input("username") %>
+       <%- form.input("lastname") %> <span class="label">optional</span>
    </div>
 </div>

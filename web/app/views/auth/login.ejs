@@ -1,12 +1,29 @@
-<div class="page-header"><h1>auth#login</h1></div>
+<div class="page-header">
+	<h1>
+		Sign into your account
+		<div class="pull-right">
+					<a href="/auth/twitter" class="btn btn-info">Sign in with twitter</a>
+        <a href="/auth/facebook" class="btn btn-primary">Sign in with facebook</a>
+        <a href="/register" class="btn btn-success">Create a new account</a>
+		</div>
+
+	
+	</h1>
+</div>
 <form action="/login" method="post">
-    <div>
-    <label>Email:</label>
-    <input type="text" name="email"/><br/>
-    </div><div>
-    <label>Password:</label>
-    <input type="password" name="password"/>
-    </div><div>
-    <input type="submit" value="Log In"/>
-    </div>
+	<div class="row">
+		<div class="span4 offset4">
+		    <div>
+			    <label>Email:</label>
+			    <input type="text" name="email"/><br/>
+		    </div>
+		    <div>
+			    <label>Password:</label>
+			    <input type="password" name="password"/>
+		    </div>
+		    <div>
+		    	<input type="submit" value="Log In"/>
+		    </div>
+		</div>
+	</div>
 </form>

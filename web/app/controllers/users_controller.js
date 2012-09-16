@@ -1,17 +1,25 @@
 load('application');
-before(use("user_auth"));
 before(use("get_periodic_settings"));
-
+before(use("user_auth",{ except : ['update']} ));
 before(loadUser, {only: ['show', 'edit', 'update', 'destroy']});
-    var bcrypt = require('bcrypt');
+before(loadSelfLoggedInUser,{only:['updateinfo','completeregistration']})
+before(use('require_login'), {only: 'edit'});
+// console.info(require_login)
 
 action('new', function () {
-    this.title = 'New user';
-    this.user = new User;
-    render();
+    if(this.user_auth.loggedIn){
+        flash('error', "you already have an account");
+        redirect(path_to.users())
+    }
+    else{
+        this.title = 'New user';
+        this.user = new User;
+        render();
+    }
 });
 
 action(function create() {
+    var bcrypt = require('bcrypt');
     var userdata = req.body.User;
     if(userdata.passwordconfirm!=userdata.password){
         delete userdata.passwordconfirm;
@@ -21,18 +29,18 @@ action(function create() {
             title: 'New user'
         });
     }
+    // else if(){}
     else{
         delete userdata.passwordconfirm;
         bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(userdata.password, salt, function(err, hash) {
                 // Store hash in your password DB.
-                userdata.description= userdata.password;
                 userdata.password= hash;
                 console.log("to save user")
-                console.log(userdata)
+                // console.log(userdata)
                 User.create(userdata, function (err, user) {
                     console.log("created user")
-                    console.log(user)
+                    // console.log(user)
 
                     if (err) {
                         console.log(err)
@@ -42,8 +50,8 @@ action(function create() {
                             title: 'New user'
                         });
                     } else {
-                        flash('info', 'User created');
-                        redirect(path_to.users());
+                        flash('info', 'Thanks for signing up!');
+                        redirect(path_to.login());
                     }
                 });
 
@@ -61,6 +69,22 @@ action(function index() {
     });
 });
 
+action(function updateinfo() {
+    // this.title = 'Complete your user registration';
+    render();
+});
+action(function completeregistration() {
+    this.user.updateAttributes(body.User, function (err) {
+        if (!err) {
+            flash('info', 'User updated');
+            redirect(path_to.user(this.user));
+        } else {
+            flash('error', 'User can not be updated');
+            render('updateinfo');     
+        }
+    }.bind(this));
+});
+
 action(function show() {
     this.title = 'User show';
     render();
@@ -72,14 +96,19 @@ action(function edit() {
 });
 
 action(function update() {
+    body.User.updatedAt = new Date();
     this.user.updateAttributes(body.User, function (err) {
         if (!err) {
             flash('info', 'User updated');
             redirect(path_to.user(this.user));
         } else {
             flash('error', 'User can not be updated');
-            this.title = 'Edit user details';
-            render('edit');
+            // this.title = 'Edit user details';
+            if(!this.user.username || !this.user.email){
+                render('updateinfo');     
+            }else{
+                render('edit');
+            }
         }
     }.bind(this));
 });
@@ -97,7 +126,7 @@ action(function destroy() {
 
 
 function loadUser() {
-    // console.log(params.id)
+    console.log(params.id)
     // User.verifyPassword('blue','red')
     User.findOne({where:{username:params.id}}, function (err, user) {
         if (err || !user) {
@@ -112,6 +141,22 @@ function loadUser() {
             }.bind(this));
         } 
         else {
+            this.user = user;
+            next();
+        }
+    }.bind(this));
+}
+
+function loadSelfLoggedInUser() {
+    console.log("loadding loggedin user")
+    User.find(this.user_auth.data.id, function (err, user) {
+        if (err || !user) {
+            flash('error', 'Invalid user data');
+            req.logOut();
+            redirect('/');   
+        } 
+        else {
+            // console.log(user)
             this.user = user;
             next();
         }

@@ -9,8 +9,11 @@ exports.routes = function (map) {
     map.resources('users',{path:'authors'});
 
     // Auth routes
+    map.get('register', 'users#new');
     map.get('login', 'auth#login');
     map.get('logout', 'auth#logout');
+    map.get('updateinfo', 'users#updateinfo');
+    map.post('updateinfo','users#completeregistration')
 
     // home routes
     map.get('dashboard', 'home#dashboard');

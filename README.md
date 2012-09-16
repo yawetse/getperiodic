@@ -43,3 +43,7 @@ You can use your Periodical to display / aggregate your social feeds, as a makes
 ### **Via the API & Widgets**
 
 The power comes from using the API to embed feeds into your apps or other web sites.
+
+## License
+
+GetPeriodic is free to use, if you plan on modifying for commercial purposes, please contact info@pluurl.com

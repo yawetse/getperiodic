@@ -24,19 +24,24 @@
                 <tbody>
                     <% users.forEach(function (user) { %>
                         <tr>
-                            <td><strong><%- link_to(user.id, path_to.user(user)) %></strong></td>
-                            <td><strong><%- link_to(user.email, path_to.user(user)) %></strong>                                  <span class="label"><%= user.password %></span>
-</td>
-                            <td><strong><%- link_to('<img src="'+user.image+'"/>', path_to.user(user)) %></strong></td>
-                            <td><strong>
+                            <td>
+                                <strong><%- link_to(user.id, path_to.user(user)) %></strong>
+                            </td>
+                            <td>
+                                <strong><%- link_to(user.email, path_to.user(user)) %></strong>                                  
+                                <span class="label label-info"><%= user.username %></span>
+                                <span class="label"><%= user.password %></span>
+                            </td>
+                            <td>
+                                <strong><%- link_to('<img src="'+user.image+'"/>', path_to.user(user)) %></strong>
+                            </td>
+                            <td>
                                 <span class="label">tw - <%= user.twitterUsername %></span>
                                 <span class="label">tw - <%= user.twitterId %></span>
-                                <span class="label">tw - <%= user.twitterAccessToken %></span>
                                 <span class="label">fb - <%= user.facebookId %></span>
                                 <span class="label">fb - <%= user.facebookUsername %></span>
-                                <span class="label">fb - <%= user.facebookAccessToken %></span><span class="label label-success"><%= user.email %></span>
 
-                                </strong></td>
+                                </td>
                             <td>
                                 <%- link_to('<i class="icon-edit"></i> Edit', path_to.edit_user(user), {class: 'btn btn-mini'}) %>
                                 <%- link_to('<i class="icon-remove icon-white"></i> Delete', path_to.user(user), {class: 'btn btn-mini btn-danger', method: 'delete', remote: true, jsonp: '(function (u) {location.href = u;})'}) %>        

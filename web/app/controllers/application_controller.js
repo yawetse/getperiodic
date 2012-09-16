@@ -1,4 +1,5 @@
 publish('user_auth',user_auth);
+publish('require_login',require_login);
 publish('get_periodic_settings',get_periodic_settings);
 
 before('protect from forgery', function () {
@@ -14,8 +15,33 @@ function user_auth(){
 	this.user_auth.loggedIn = (session.user) ? true : false;
 	if(!this.user_auth.loggedIn){
 		req.session.redirect = (req.url != '/login') ? req.url : '/dashboard'; // to send the user back to the same page after they log in
+		if(req.url == '/updateinfo'){	
+			redirect(path_to.root());
+		}
+		else{
+			next();
+		}	
 	}
-	next();
+	else{
+		// console.info(req.originalMethod);
+		// console.info(this.user_auth.data.email)
+		// console.info(this.user_auth.data.username)
+		if( (!this.user_auth.data.email || !this.user_auth.data.username) && req.url != '/updateinfo' && req.originalMethod!='POST'){
+            redirect(path_to.updateinfo());      	 
+		}
+		else{
+			next();			
+		}
+	}
+}
+function require_login(){
+	if(!this.user_auth.loggedIn){
+		flash('error', 'Must be logged in to access reesource');
+        redirect(path_to.root());
+	}
+	else{
+		next();		
+	}
 }
 function get_periodic_settings(){
 	this.get_periodic_settings = {
