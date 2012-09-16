@@ -8,7 +8,7 @@ You must have node > 0.6.12 (this was tested on 0.6.12)
 
 1. node with gyp installed
 
-	'$ npm install -g node-gyp'
+	`$ npm install -g node-gyp`
 
 ## Installation
 
