@@ -45,6 +45,13 @@ var User = describe('User', function () {
     property('soundcloudId', String);
     property('soundcloudAccessToken', String);
     property('soundcloudAccessTokenSecret', String);
+    property('instagramId', String);
+    property('instagramAccessToken', String);
+    property('githubId', String);
+    property('githubUsername', String);
+    property('githubAccessToken', String);
+    property('tumblrId', String);
+    property('tumblrAccessToken', String);
 });var Post = describe('Post', function () {
     property('title', String);
     property('content', String);
