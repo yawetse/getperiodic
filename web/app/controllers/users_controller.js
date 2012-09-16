@@ -126,10 +126,13 @@ action(function destroy() {
 
 
 function loadUser() {
-    console.log(params.id)
-    // User.verifyPassword('blue','red')
     User.findOne({where:{username:params.id}}, function (err, user) {
-        if (err || !user) {
+        queryId = params.id;
+        if(queryId != null && 'number' != typeof queryId && (queryId.length != 12 && queryId.length != 24)){
+            console.log("invalid id")
+            redirect(path_to.users());      
+        }
+        else if (err || !user) {
             User.find(params.id, function (err, user) {
                 if (err || !user) {
                     redirect(path_to.users());       
