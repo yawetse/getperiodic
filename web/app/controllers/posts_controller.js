@@ -224,7 +224,7 @@ function storeUpdate(err,service,data,params){
             newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
             newpost.userid = params.userid;
             newpost.originalid = data.id;
-            newpost.originaldate = new Date(data.created_time);
+            newpost.originaldate = new Date(data.created_time *1000);//in epoch time
             newpost.originaldata = data;
             newpost.source = service;
             newpost.type = "image";
