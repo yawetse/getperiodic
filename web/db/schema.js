@@ -42,9 +42,17 @@ var User = describe('User', function () {
     property('facebookAccessToken', String);
     property('facebookUsername', String);
     property('facebookId', String, { index: true });
+    property('foursquareAccessToken', String);
+    property('foursquareId', String, { index: true });
     property('soundcloudId', String);
     property('soundcloudAccessToken', String);
     property('soundcloudAccessTokenSecret', String);
+    property('meetupId', String);
+    property('meetupAccessToken', String);
+    property('meetupAccessTokenSecret', String);
+    property('linkedinId', String);
+    property('linkedinAccessToken', String);
+    property('linkedinAccessTokenSecret', String);
     property('instagramId', String);
     property('instagramAccessToken', String);
     property('githubId', String);
@@ -53,6 +61,9 @@ var User = describe('User', function () {
     property('tumblrUsername', String);
     property('tumblrAccessToken', String);
     property('tumblrAccessTokenSecret', String);
+    property('goodreadsId', String);
+    property('goodreadsAccessToken', String);
+    property('goodreadsAccessTokenSecret', String);
 });var Post = describe('Post', function () {
     property('title', String);
     property('content', String);
