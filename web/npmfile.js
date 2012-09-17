@@ -20,4 +20,5 @@ require('feedparser');
 require('yamljs');
 require('ntwitter');
 require('fbgraph');
+require('instapics');
 

@@ -32,14 +32,23 @@
 
 							} %>
 						</h3>
-						<p><%=  currentpost.content %></p>
-						<%  if(currentpost.mediacontent){%><p><%=  currentpost.mediacontent %></p> <%} %>
+						<%  if(currentpost.content){%><p><%=  currentpost.content %></p> <%} %>
+
+						<%  if(currentpost.mediacontent){
+								if(currentpost.source=='instagram'){
+									%><p><img width=200 src="<%=  currentpost.mediacontent %>"/></p> <%
+								}
+								else{
+									%><p><%=  currentpost.mediacontent %></p> <%	
+								}
+							} %>
 						<ul class="breadcrumb">
 							<%if(currentpost.link){%>
 							<li><a href="<%=  currentpost.link %>">Link</a> <span class="divider">/</span></li>
 
 							<%}
 							%>
+							<li class="active"> <%=  currentpost.source %> <span class="divider">/</span> </li>
 							<li class="active">
  <span class="label"><%=  currentpost.originaldate %></span></li>
 						</ul>

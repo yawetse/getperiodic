@@ -29,20 +29,23 @@ action(function create() {
 action(function updateissues() {
     console.log("now in update issues")
     currentuserid = this.user_auth.data.id;
+    currentuserinstagramid = this.user_auth.data.instagramId;
     currentuserauthconf = this.auth_conf;
     // console.log(this)
-    getUpdates(currentuserauthconf,'facebook',null,{"userid":currentuserid},function(facebookdata){
-        getUpdates(currentuserauthconf,'twitter',null,{"userid":currentuserid},function(facebookdata){
-            // console.log(d)
-            //User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
-            Post.all({where:{userid:currentuserid}},function(err,data){
-                if(err){
-                    send(err)
-                }
-                else{
-                    send(data)
-                }
-            });    
+    getUpdates(currentuserauthconf,'facebook',{"userid":currentuserid},{"userid":currentuserid},function(facebookdata){
+        getUpdates(currentuserauthconf,'twitter',{"userid":currentuserid},{"userid":currentuserid},function(twitterdata){
+            getUpdates(currentuserauthconf,'instagram',{"instagramid":currentuserinstagramid,"userid":currentuserid},{"userid":currentuserid},function(instagramdata){
+                // console.log(d)
+                //User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
+                Post.all({where:{userid:currentuserid}},function(err,data){
+                    if(err){
+                        send(err)
+                    }
+                    else{
+                        send(data)
+                    }
+                });    
+            });   
         });   
     });
 });
@@ -118,7 +121,7 @@ function getUpdates(auth_conf,account_type,options,params,next){
             if(auth_conf.has_twitter){
                 auth_conf.twitter_oauth.getUserTimeline(params,
                     function (err, data) {
-                        console.log(data);
+                        // console.log(data);
                         if(err){
                             console.log("error getting tweets")
                             flash('error', 'error getting tweets');
@@ -141,6 +144,38 @@ function getUpdates(auth_conf,account_type,options,params,next){
             else{
                 console.log("user doesn't have twitter")
                 flash('error', 'Can not get tweets');
+                next();
+            }
+            break;
+        case "instagram":
+
+            if(auth_conf.has_instagram){
+                console.log('user has instagram')
+                var instagram = require('instapics');
+                auth_conf.instagram_api.recent(options.instagramid,null,function(err,picdata){
+                    if(err){
+                        console.log("error getting pics")
+                        flash('error', 'error getting pics');
+                        next();
+                    }
+                    else{
+                        console.log("got instagram pics");
+                        flash('success', 'updated instagram feed');
+
+                        var instagramfeeddata = picdata,
+                            returnData =new Array(); 
+                        for(x in instagramfeeddata){
+                            returnData.push(storeUpdate(err,account_type,instagramfeeddata[x],{userid:options.userid}));
+                        }
+                        next(returnData);     
+                    }
+
+                });
+
+            }
+            else{
+                console.log("user doesn't have instagram")
+                flash('error', 'Can not get pics');
                 next();
             }
             break;
@@ -182,8 +217,33 @@ function getUpdates(auth_conf,account_type,options,params,next){
 }
 
 function storeUpdate(err,service,data,params){
-    console.info("trying to store update")
+    console.info("trying to store update: "+service)
     switch(service){
+        case "instagram":
+            var newpost = new Post;
+            newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
+            newpost.userid = params.userid;
+            newpost.originalid = data.id;
+            newpost.originaldate = new Date(data.created_time);
+            newpost.originaldata = data;
+            newpost.source = service;
+            newpost.type = "image";
+            newpost.mediacontent = data.images.standard_resolution.url;
+            if(data.caption){
+                newpost.content = data.caption.text;
+            }
+            newpost.link = data.link
+             console.log(newpost["service-userid-orginaldataid"])
+            newpost.save(newpost, function (err, post) {
+                if (err) {
+                    console.info(err)
+                    return false;
+                } else {
+                    console.info("store image")
+                    return post;
+                }
+            });
+            break;
         case "twitter":
             var newpost = new Post;
             newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
@@ -195,7 +255,7 @@ function storeUpdate(err,service,data,params){
             newpost.type = "tweet";
             newpost.content = data.text;
             newpost.link = 'http://twitter.com/'+data.user.screen_name+'/status/'+data.did;
-            console.log(newpost)
+            // console.log(newpost)
             newpost.save(newpost, function (err, post) {
                 if (err) {
                     return false;
@@ -230,7 +290,7 @@ function storeUpdate(err,service,data,params){
             if(data.link){
                 newpost.link = data.link;
             }
-            console.log(newpost)
+            // console.log(newpost)
             newpost.save(newpost, function (err, post) {
                 if (err) {
                     return false;

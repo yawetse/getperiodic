@@ -8,7 +8,6 @@ action('welcome', function () {
         title: "home#welcome"
     });
 });
-
 action('index', function () {
     if(this.user_auth.loggedIn){
         redirect(path_to.dashboard())

@@ -90,6 +90,22 @@ function get_posts_from_connected_accounts(){
 			// };
 			this.auth_conf.facebook_graph.setAccessToken(this.user_auth.data.facebookAccessToken);
 		}
+		if(this.user_auth.data.instagramAccessToken){
+			console.log('user has instagram')
+			this.auth_conf.has_instagram = true;
+			var instagram = require('instapics');
+			//var ntwitter = require('ntwitter');
+			// var options = {
+			//     timeout:  3000
+			//   , pool:     { maxSockets:  Infinity }
+			//   , headers:  { connection:  "keep-alive" }
+			// };
+			this.auth_conf.instagram_api = new instagram({token:this.user_auth.data.instagramAccessToken});
+			// this.auth_conf.instagram_api.recent(this.user_auth.data.instagramId,null,function(err,data){
+			// 	console.log(data)
+			// })
+		}
+
 	}
 	next();
 }
