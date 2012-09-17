@@ -1,0 +1,12 @@
+{
+  "name": "node-soundcloud",
+  "description": "fun soundcloud client",
+  "version": "0.0.1",
+  "author": "Logan Aube <logan@bnotions.ca>",
+  "keywords": ["soundcloud"],
+  "main" : "lib/soundcloud.js",
+  "directories" : { "lib" : "./lib" },
+  "dependencies": { "oauth": ">= 0.8.2" },
+  "repository" : {"type": "git" , "url": "http://github.com/lowgain/node-soundcloud.git" },
+  "engines": { "node": ">= 0.2.0" }
+}

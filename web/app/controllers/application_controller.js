@@ -105,7 +105,53 @@ function get_posts_from_connected_accounts(){
 			// 	console.log(data)
 			// })
 		}
+		if(this.user_auth.data.foursquareAccessToken){
+			console.log('user has foursquare')
+			this.auth_conf.has_foursquare = true;
+			var foursquare = require('4sq');
+			//var ntwitter = require('ntwitter');
+			// var options = {
+			//     timeout:  3000
+			//   , pool:     { maxSockets:  Infinity }
+			//   , headers:  { connection:  "keep-alive" }
+			// };
+			this.auth_conf.foursquare_api = new foursquare({token:this.user_auth.data.foursquareAccessToken});
+			this.auth_conf.foursquare_api.checkins('self',null, function(err,data){
+				// console.log(data.checkins.items)
+				//use bing for maps http://www.bingmapsportal.com/isdk/ajaxv7#CreateMapWithViewOptions2
+			});
+			// this.auth_conf.instagram_api.recent(this.user_auth.data.instagramId,null,function(err,data){
+			// 	console.log(data)
+			// })
+		}
+		if(this.user_auth.data.soundcloudAccessToken){
+			console.log('user has soundcloud')
+			this.auth_conf.has_soundcloud = true;
+			var soundcloud = require('node-soundcloud');
+			//var ntwitter = require('ntwitter');
+			// var options = {
+			//     timeout:  3000
+			//   , pool:     { maxSockets:  Infinity }
+			//   , headers:  { connection:  "keep-alive" }
+			// };
+			console.log(this.auth_conf.soundcloud)
+			this.auth_conf.soundcloud_api = new soundcloud(
+				this.user_auth.data.soundcloudAccessToken,
+				this.user_auth.data.soundcloudAccessTokenSecret,
+				null,
+				false,
+				this.auth_conf.soundcloud.apiKey,
+				this.auth_conf.soundcloud.secret);
+			this.auth_conf.soundcloud_api.apiCall('GET', 'me/tracks', function(err, data, response) {
+				 	console.log("got soundcloud  ======0=09=-9=-=0-=0-=")
+    				console.log(data)
 
+  			});
+
+			// this.auth_conf.instagram_api.recent(this.user_auth.data.instagramId,null,function(err,data){
+			// 	console.log(data)
+			// })
+		}
 	}
 	next();
 }
