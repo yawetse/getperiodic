@@ -2,7 +2,6 @@ publish('user_auth',user_auth);
 publish('require_login',require_login);
 publish('get_periodic_settings',get_periodic_settings);
 publish('get_posts_from_connected_accounts',get_posts_from_connected_accounts);
-
 before('protect from forgery', function () {
     protectFromForgery('be05db94204718a34719430d91fb5ae16feb1e65');
 });
@@ -44,6 +43,7 @@ function require_login(){
 		next();		
 	}
 }
+// function require_admin_access
 function get_periodic_settings(){
 	this.get_periodic_settings = {
 		"name":"GetPeriodic", // "userauth":session.auth

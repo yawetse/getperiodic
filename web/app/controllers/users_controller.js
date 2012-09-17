@@ -1,10 +1,12 @@
 load('application');
 before(use("get_periodic_settings"));
-before(use("user_auth",{ except : ['update']} ));
+before(use('user_auth', {except: ['update']}));
 before(loadUser, {only: ['show', 'edit', 'update', 'destroy']});
 before(loadSelfLoggedInUser,{only:['updateinfo','completeregistration']})
-before(use('require_login'), {only: 'edit'});
-// console.info(require_login)
+before(use('require_login'), {only: ['edit']});
+
+var shared_functions = require(app.root+'/config/shared_functions.js');
+console.info(shared_functions)
 
 action('new', function () {
     if(this.user_auth.loggedIn){
@@ -21,13 +23,29 @@ action('new', function () {
 action(function create() {
     var bcrypt = require('bcrypt');
     var userdata = req.body.User;
-    if(userdata.passwordconfirm!=userdata.password){
+
+    console.log(req.body)
+    if (
+        userdata.password===undefined ||
+        !userdata.password || 
+        userdata.password==='' || 
+        userdata.password===' ' || 
+        userdata.passwordconfirm==undefined|| 
+        !userdata.passwordconfirm || 
+        userdata.passwordconfirm==='' || 
+        userdata.passwordconfirm===' ' ){
+        delete userdata.password;
+        delete userdata.passwordconfirm;
+        flash('error', "missing password");
+        console.log("missing password");
+        redirect(path_to.new_user());
+    }
+    else if(userdata.passwordconfirm!=userdata.password){
+        delete userdata.password;
         delete userdata.passwordconfirm;
         flash('error', "confirmation password doesn't match");
-        render('new', {
-            user: userdata,
-            title: 'New user'
-        });
+        console.log("confirmation password doesn't match");
+        redirect(path_to.new_user());
     }
     // else if(){}
     else{
@@ -44,11 +62,10 @@ action(function create() {
 
                     if (err) {
                         console.log(err)
+                        delete user.password;
                         flash('error', 'User can not be created');
-                        render('new', {
-                            user: user,
-                            title: 'New user'
-                        });
+                        redirect(path_to.new_user());
+
                     } else {
                         flash('info', 'Thanks for signing up!');
                         redirect(path_to.login());
@@ -91,39 +108,61 @@ action(function show() {
 });
 
 action(function edit() {
-    this.title = 'User edit';
-    render();
+
+    if(shared_functions.require_admin_user_access(this.user_auth,this.user)){
+        this.title = 'User edit';
+        render();
+    }
+    else{
+        redirect(path_to.users())
+    }
+
 });
 
 action(function update() {
-    body.User.updatedAt = new Date();
-    this.user.updateAttributes(body.User, function (err) {
-        if (!err) {
-            flash('info', 'User updated');
-            redirect(path_to.user(this.user));
-        } else {
-            flash('error', 'User can not be updated');
-            // this.title = 'Edit user details';
-            if(!this.user.username || !this.user.email){
-                render('updateinfo');     
-            }else{
-                render('edit');
+
+    if(shared_functions.require_admin_user_access(this.user_auth,this.user)){
+        body.User.updatedAt = new Date();
+        this.user.updateAttributes(body.User, function (err) {
+            if (!err) {
+                flash('info', 'User updated');
+                redirect(path_to.user(this.user));
+            } else {
+                flash('error', 'User can not be updated');
+                // this.title = 'Edit user details';
+                if(!this.user.username || !this.user.email){
+                    render('updateinfo');     
+                }else{
+                    render('edit');
+                }
             }
-        }
-    }.bind(this));
+        }.bind(this));
+
+    }
+    else{
+        render('edit'); 
+        flash('error', 'user: Access denied');
+    }
+
 });
 
 action(function destroy() {
-    this.user.destroy(function (error) {
-        if (error) {
-            flash('error', 'Can not destroy user');
-        } else {
-            flash('info', 'User successfully removed');
-        }
-        send("'" + path_to.users() + "'");
-    });
+    if(shared_functions.require_admin_user_access(this.user_auth,this.user)){
+        this.user.destroy(function (error) {
+            if (error) {
+                flash('error', 'Can not destroy user');
+            } else {
+                flash('info', 'User successfully removed');
+            }
+            send("'" + path_to.users() + "'");
+        });
+    }
+    else{
+        // console.log(this)
+        flash('error', 'user: Access denied');
+    }
+    send("'" + path_to.users() + "'");
 });
-
 
 function loadUser() {
     User.findOne({where:{username:params.id}}, function (err, user) {

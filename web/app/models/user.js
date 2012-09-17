@@ -20,8 +20,9 @@ User.validatesFormatOf('email', {
 
 User.validatesUniquenessOf('email', {  allowNull: true,message:"- email is taken, you already have an account"});
 User.validatesUniquenessOf('username', {  allowNull: true,message:"- username is taken"});
-User.validatesUniquenessOf('twitterId', {  allowNull: true,message:"- already synced twitter account"});
-User.validatesUniquenessOf('facebookId', {  allowNull: true,message:"- already synced facebook account"});
+// User.validatesUniquenessOf('twitterId', {  allowNull: true,message:"- already synced twitter account"});
+// User.validatesUniquenessOf('facebookId', {  allowNull: true,message:"- already synced twitter account"});
+// User.validatesUniquenessOf('facebookId', {  allowNull: true,message:"- already synced facebook account"});
 // User.validatesUniquenessOf('soundcloudId', {  allowNull: true,message:"- already synced soundcloud account"});
 // User.validatesUniquenessOf('githubId', {  allowNull: true,message:"- already synced github account"});
 
