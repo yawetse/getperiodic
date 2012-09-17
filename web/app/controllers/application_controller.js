@@ -2,6 +2,7 @@ publish('user_auth',user_auth);
 publish('require_login',require_login);
 publish('get_periodic_settings',get_periodic_settings);
 publish('get_posts_from_connected_accounts',get_posts_from_connected_accounts);
+publish('load_user_posts',load_user_posts)
 before('protect from forgery', function () {
     protectFromForgery('be05db94204718a34719430d91fb5ae16feb1e65');
 });
@@ -91,4 +92,18 @@ function get_posts_from_connected_accounts(){
 		}
 	}
 	next();
+}
+function load_user_posts(){
+	var shared_functions = require(app.root+'/config/shared_functions.js');
+	// console.log(shared_functions)
+//	console.log(this.user_auth.data.id)
+
+    Post.all({where:{userid:this.user_auth.data.id}}, function (err, posts) {
+        if (err || !posts) {
+            redirect(path_to.posts());
+        } else {
+            this.posts = posts.sort(shared_functions.sort_by('originaldate', true, Date.parse));
+            next();
+        }
+    }.bind(this));
 }

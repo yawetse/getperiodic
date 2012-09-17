@@ -1,1 +1,79 @@
-<div class="page-header"><h1>home#dashboard</h1></div>
+<div class="row">
+	<div class="span12">
+		<div class="page-header"><h1>Welcome <%- user_auth.data.username %></h1></div>
+	</div>
+
+	<div class="span12">
+		<div class="page-header"><h2>Getting Started</h2></div>
+	</div>
+	<div class="span12">
+		<div><h3>1# Create Your First Periodical</h3></div>
+		<div>
+			<div><h3>2# Add sources for your issues by connecting accounts</h3></div>
+			<div style="padding:5px 40px">
+	    		<%- partial('connect/connected_accounts.ejs', {locals: {display:"normal"}}) %>	
+			</div>
+    	</div>
+		<div><h3>3# Create your first Volume to customise your periodical</h3></div>
+		<div><h3>4# Add collaborators</h3></div>
+	</div>
+	<div class="span12">
+		<div class="page-header"><h2>Recent Issues <button class=" btn btn-large btn-primary" id="update-posts" data-loading-text="Updating">Update Feeds</button> </h2>
+		</div>
+		<div id="data-status-message"></div>
+		<div id="data-feed-results">
+			<% for(x in posts){
+				currentpost = posts[x];
+				%>
+					<div id="post-" class="well well-small">
+						<h3>						
+							<%  if(currentpost.title){%><%=  currentpost.title %><%}else{
+								%><%=  currentpost.source %> update<%
+
+							} %>
+						</h3>
+						<p><%=  currentpost.content %></p>
+						<%  if(currentpost.mediacontent){%><p><%=  currentpost.mediacontent %></p> <%} %>
+						<ul class="breadcrumb">
+							<%if(currentpost.link){%>
+							<li><a href="<%=  currentpost.link %>">Link</a> <span class="divider">/</span></li>
+
+							<%}
+							%>
+							<li class="active">
+ <span class="label"><%=  currentpost.originaldate %></span></li>
+						</ul>
+					</div>
+				<%
+			} %>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$("#update-posts").click(function(e){
+	    	$("#update-posts").button('loading')
+			$.ajax({
+			  	url: '/updateissues',
+			  	success: function(data) {
+			    	$('#data-feed-results').html(data.toString());
+			    	console.log(data)
+			  		$("#data-status-message").html(
+			  			'<div class="alert alert-info">'
+				  			+'<button type="button" class="close" data-dismiss="alert">×</button>'
+				  			+'Updated feeds.'
+			  			+'</div>');
+			    	$("#update-posts").button('reset')
+			  	},
+			  	error: function(data){
+			  		$("#data-status-message").html(
+			  			'<div class="alert alert-error">'
+				  			+'<button type="button" class="close" data-dismiss="alert">×</button>'
+				  			+'<strong>Oh snap!</strong> Something went wrong, try again.'
+			  			+'</div>');
+			    	$("#update-posts").button('reset')
+			  	}
+			});
+		}).button('toggle');
+	});
+</script>

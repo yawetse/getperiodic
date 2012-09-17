@@ -2,7 +2,7 @@ load('application');
 before(use('user_auth'));
 before(use('get_periodic_settings'));
 before(use('get_posts_from_connected_accounts'));
-before(use('require_login'), {only: ['new','edit','update','destroy']});
+before(use('require_login'), {only: ['new','edit','update','destroy','updateissues']});
 before(loadPost, {only: ['show', 'edit', 'update', 'destroy']});
 
 action('new', function () {
@@ -26,6 +26,27 @@ action(function create() {
     });
 });
 
+action(function updateissues() {
+    console.log("now in update issues")
+    currentuserid = this.user_auth.data.id;
+    currentuserauthconf = this.auth_conf;
+    // console.log(this)
+    getUpdates(currentuserauthconf,'facebook',null,{"userid":currentuserid},function(facebookdata){
+        getUpdates(currentuserauthconf,'twitter',null,{"userid":currentuserid},function(facebookdata){
+            // console.log(d)
+            //User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
+            Post.all({where:{userid:currentuserid}},function(err,data){
+                if(err){
+                    send(err)
+                }
+                else{
+                    send(data)
+                }
+            });    
+        });   
+    });
+});
+
 action(function index() {
     /*
     getUpdates(this.auth_conf,'facebook',null,null,function(){
@@ -43,7 +64,6 @@ action(function index() {
             posts: posts
         });
     }); 
-
 });
 
 action(function show() {
@@ -92,7 +112,7 @@ function loadPost() {
 }
 
 function getUpdates(auth_conf,account_type,options,params,next){
-    console.log(next)
+    // console.log(next)
     switch(account_type){
         case "twitter":
             if(auth_conf.has_twitter){
@@ -107,7 +127,13 @@ function getUpdates(auth_conf,account_type,options,params,next){
                         else{
                             console.log("got tweets");
                             flash('success', 'updated twitter feed');
-                            next();                    
+
+                            var twitterfeeddata = data,
+                                returnData =new Array(); 
+                            for(x in twitterfeeddata){
+                                returnData.push(storeUpdate(err,account_type,twitterfeeddata[x],params));
+                            }
+                            next(returnData);     
                         }
                     }
                 );
@@ -121,7 +147,8 @@ function getUpdates(auth_conf,account_type,options,params,next){
         case "facebook":
             if(auth_conf.has_facebook){
                 auth_conf.facebook_graph.get("me?fields=feed", function(err, data) {
-                   console.info(data)
+                   console.log("got facebook data now, here it is------")
+                   //console.info(data.feed.data)
                    // { id: '4', name: 'Mark Zuckerberg'... }
 
                     if(err){
@@ -132,7 +159,13 @@ function getUpdates(auth_conf,account_type,options,params,next){
                     else{
                         console.log("got facebook");
                         flash('success', 'updated facebook feed');
-                        next();                    
+
+                        var facebookfeeddata = data.feed.data,
+                            returnData =new Array(); 
+                        for(x in facebookfeeddata){
+                            returnData.push(storeUpdate(err,account_type,facebookfeeddata[x],params));
+                        }
+                        next(returnData);                    
                     }
                 
                 });
@@ -142,6 +175,69 @@ function getUpdates(auth_conf,account_type,options,params,next){
                 flash('error', 'Can not get facebook');
                 next();
             }
+            break;
+        default:
+            next();
+    }
+}
+
+function storeUpdate(err,service,data,params){
+    console.info("trying to store update")
+    switch(service){
+        case "twitter":
+            var newpost = new Post;
+            newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
+            newpost.userid = params.userid;
+            newpost.originalid = data.id;
+            newpost.originaldate = new Date(data.created_at);
+            newpost.originaldata = data;
+            newpost.source = service;
+            newpost.type = "tweet";
+            newpost.content = data.text;
+            newpost.link = 'http://twitter.com/'+data.user.screen_name+'/status/'+data.did;
+            console.log(newpost)
+            newpost.save(newpost, function (err, post) {
+                if (err) {
+                    return false;
+                } else {
+                    return post;
+                }
+            });
+            break;
+        case "facebook":
+            var newpost = new Post;
+            newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
+            newpost.userid = params.userid;
+            newpost.originalid = data.id;
+            newpost.originaldate = new Date(data.created_time);
+            newpost.originaldata = data;
+            newpost.source = service;
+            newpost.type = data.type;
+            if(data.name){
+                newpost.title = data.name;
+            }
+
+            if(data.story){
+                newpost.content = data.story;
+            }
+            else if(data.description){
+                newpost.content = data.description;
+            }
+            else if(data.message){
+                newpost.content = data.message;
+            }
+
+            if(data.link){
+                newpost.link = data.link;
+            }
+            console.log(newpost)
+            newpost.save(newpost, function (err, post) {
+                if (err) {
+                    return false;
+                } else {
+                    return post;
+                }
+            });
             break;
         default:
             next();

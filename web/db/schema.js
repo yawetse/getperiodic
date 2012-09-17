@@ -69,12 +69,16 @@ var User = describe('User', function () {
 });var Post = describe('Post', function () {
     property('title', String);
     property('content', String);
+    property('mediacontent', String);
+    property('link', String);
     property('type', String);
     property('createdAt', Date, {default: function () { return new Date() }});
     property('source', String);
     property('originaldata', String);
     property('originalid', String);
+    property('originaldate', Date);
     property('userid', String);
+    property('service-userid-orginaldataid', String);
 });var Periodical = describe('Periodical', function () {
     property('title', String);
     property('name', String,{index:true,limit:150});

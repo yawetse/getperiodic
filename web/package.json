@@ -1,5 +1,5 @@
 { "name": "getperiodic", 
-  "version": "0.0.9",
+  "version": "0.1.2",
   "author": "Yaw Joseph Etse",
   "description": "GetPeriodic",
   "keywords": ["periodic", "web-framework", "social-aggregator", "ruby-on-rails", "express", "railway"],

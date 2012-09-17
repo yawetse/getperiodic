@@ -4,9 +4,12 @@ exports.routes = function (map) {
     map.resources('periodicals', function (periodical) {
 	    periodical.resources('volumes');
 	});
-    map.resources('posts');
+    map.resources('posts',{path:'issues'});
     map.resources('volumes');
     map.resources('users',{path:'authors'});
+
+    // Post routes
+    map.get('updateissues', 'posts#updateissues');
 
     // Auth routes
     map.get('register', 'users#new');
