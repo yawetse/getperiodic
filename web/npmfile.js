@@ -13,4 +13,7 @@ require('passport-local');
 require('passport-soundcloud');
 require('passport-twitter');
 require('feedparser');
+require('yamljs');
+require('ntwitter');
+require('fbgraph');
 
