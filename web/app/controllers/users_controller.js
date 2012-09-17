@@ -6,7 +6,7 @@ before(loadSelfLoggedInUser,{only:['updateinfo','completeregistration']})
 before(use('require_login'), {only: ['edit']});
 
 var shared_functions = require(app.root+'/config/shared_functions.js');
-console.info(shared_functions)
+// console.info(shared_functions)
 
 action('new', function () {
     if(this.user_auth.loggedIn){
@@ -56,6 +56,7 @@ action(function create() {
                 userdata.password= hash;
                 console.log("to save user")
                 // console.log(userdata)
+                userdata.username=shared_functions.make_user_name_nice(userdata.username);
                 User.create(userdata, function (err, user) {
                     console.log("created user")
                     // console.log(user)
@@ -91,6 +92,7 @@ action(function updateinfo() {
     render();
 });
 action(function completeregistration() {
+    body.User.username = shared_functions.make_user_name_nice(body.User.username);
     this.user.updateAttributes(body.User, function (err) {
         if (!err) {
             flash('info', 'User updated');

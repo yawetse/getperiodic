@@ -19,6 +19,8 @@
      // model definitions here
  });
 
+
+searching: User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
 */
 
 var User = describe('User', function () {
@@ -81,10 +83,6 @@ var User = describe('User', function () {
     property('updatedAt', Date, {default: function () { return new Date() }});
     property('config', String);
     property('userid', String);
-});var Periodicalmembers = describe('Periodicalmembers', function () {
-    property('periodicalid', Number);
-    property('userid', Number);
-    property('membertype', String);
 });var Volume = describe('Volume', function () {
     property('title', String);
     property('name', String,{index:true,limit:150});

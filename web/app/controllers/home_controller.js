@@ -9,15 +9,20 @@ action('welcome', function () {
 });
 
 action('index', function () {
-	// console.log(user_auth)
-    render({
-        title: "home#index"
-    });
+    if(this.user_auth.loggedIn){
+        render('dashboard')
+    }
+    else{
+        // console.log(user_auth)
+        render({
+            // title: "home#index"
+        });
+    }
 });
 
 action('dashboard', function () {
 	console.log(req)
     render({
-        title: "home#dashboard"
+        // title: "home#dashboard"
     });
 });
