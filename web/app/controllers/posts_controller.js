@@ -36,16 +36,18 @@ action(function updateissues() {
         getUpdates(currentuserauthconf,'twitter',{"userid":currentuserid},{"userid":currentuserid},function(twitterdata){
             getUpdates(currentuserauthconf,'instagram',{"instagramid":currentuserinstagramid,"userid":currentuserid},{"userid":currentuserid},function(instagramdata){
                 getUpdates(currentuserauthconf,'tumblr',{"userid":currentuserid,"userid":currentuserid},{"userid":currentuserid},function(tumblrdata){
-                    // console.log(d)
-                    //User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
-                    Post.all({where:{userid:currentuserid}},function(err,data){
-                        if(err){
-                            send(err)
-                        }
-                        else{
-                            send(data)
-                        }
-                    });    
+                    getUpdates(currentuserauthconf,'soundcloud',{"userid":currentuserid,"userid":currentuserid},{"userid":currentuserid},function(tumblrdata){
+                        // console.log(d)
+                        //User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
+                        Post.all({where:{userid:currentuserid}},function(err,data){
+                            if(err){
+                                send(err)
+                            }
+                            else{
+                                send(data)
+                            }
+                        });    
+                    });     
                 });  
             });   
         });   
@@ -118,7 +120,42 @@ function loadPost() {
 
 function getUpdates(auth_conf,account_type,options,params,next){
     // console.log(next)
+
+    /*
+    add userid to auth_conf
+            
+    */
     switch(account_type){
+        case "soundcloud":
+            if(auth_conf.has_soundcloud){
+                auth_conf.soundcloud_api.apiAuthCall('GET','/me/tracks.json',params,auth_conf.soundcloud_api.accessToken,function(err,data) {
+                    // console.log(data.body);
+                    if(err){
+                        console.log("error getting sounds")
+                        flash('error', 'error getting sounds');
+                        next();
+                    }
+                    else{
+                        console.log("got sounds");
+                        flash('success', 'updated tumblogs feed');
+
+                        var soundclouddata = data.body,
+                            returnData =new Array(); 
+
+                        console.log(soundclouddata)
+                        for(x in soundclouddata){
+                            returnData.push(storeUpdate(err,account_type,soundclouddata[x],params));
+                        }
+                        next(returnData);     
+                    }
+                });
+            }
+            else{
+                console.log("user doesn't have soundcloud")
+                flash('error', 'Can not get soundcloud');
+                next();
+            }
+            break;
         case "twitter":
             if(auth_conf.has_twitter){
                 auth_conf.twitter_oauth.getUserTimeline(params,
@@ -303,6 +340,31 @@ function storeUpdate(err,service,data,params){
                     break;
             }
             // console.log(newpost["service-userid-orginaldataid"])
+            newpost.save(newpost, function (err, post) {
+                if (err) {
+                    console.info(err)
+                    return false;
+                } else {
+                    console.info("store image")
+                    return post;
+                }
+            });
+            break;
+        case "soundcloud":
+            var newpost = new Post;
+            newpost.title = data.title;
+            newpost.content = data.description;
+            newpost.mediacontent = data.id;
+            newpost.link = data.permalink_url;
+            newpost.type = "audio";
+            newpost.source = service;
+            newpost.originaldata = data;
+            newpost.originalid = data.id;
+            newpost.originaldate = new Date(data.created_at);//in epoch time
+            newpost.userid = params.userid;
+            newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
+            console.log(newpost["service-userid-orginaldataid"]);
+
             newpost.save(newpost, function (err, post) {
                 if (err) {
                     console.info(err)

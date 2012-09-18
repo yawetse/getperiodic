@@ -24,4 +24,6 @@ require('fbgraph');
 require('instapics');
 require('4sq');
 require('tumblr');
+require('soundcloud-js-auth');
+require('railway-pagination');
 

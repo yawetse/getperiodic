@@ -69,7 +69,7 @@ function get_posts_from_connected_accounts(){
 	// console.log(auth_conf)
 	if(this.user_auth.loggedIn){
 		if(this.user_auth.data.twitterAccessToken && this.user_auth.data.twitterAccessTokenSecret){
-			// console.log('user has twitter')
+			console.log('user has twitter')
 			this.auth_conf.has_twitter = true;
 			var ntwitter = require('ntwitter');
 			this.auth_conf.twitter_oauth = new ntwitter({
@@ -114,30 +114,14 @@ function get_posts_from_connected_accounts(){
 		if(this.user_auth.data.soundcloudAccessToken){
 			console.log('user has soundcloud')
 			this.auth_conf.has_soundcloud = true;
-			var soundcloud = require('node-soundcloud');
-			//var ntwitter = require('ntwitter');
-			// var options = {
-			//     timeout:  3000
-			//   , pool:     { maxSockets:  Infinity }
-			//   , headers:  { connection:  "keep-alive" }
-			// };
-			console.log(this.auth_conf.soundcloud)
-			this.auth_conf.soundcloud_api = new soundcloud(
-				this.user_auth.data.soundcloudAccessToken,
-				this.user_auth.data.soundcloudAccessTokenSecret,
-				null,
-				false,
-				this.auth_conf.soundcloud.apiKey,
-				this.auth_conf.soundcloud.secret);
-			this.auth_conf.soundcloud_api.apiCall('GET', 'me/tracks', function(err, data, response) {
-				 	console.log("got soundcloud  ======0=09=-9=-=0-=0-=")
-    				console.log(data)
-
-  			});
-
-			// this.auth_conf.instagram_api.recent(this.user_auth.data.instagramId,null,function(err,data){
-			// 	console.log(data)
-			// })
+			var soundcloud = require('soundcloud-js-auth');
+			this.auth_conf.soundcloud_api = soundcloud;
+			this.auth_conf.soundcloud_api.accessToken = this.user_auth.data.soundcloudAccessToken;
+			/*
+			soundcloud.apiAuthCall('GET','/me/tracks.json',null,this.user_auth.data.soundcloudAccessToken,function(err,data) {
+                console.log(data.body);
+            });
+			*/
 		}
 	}
 	next();
@@ -147,7 +131,7 @@ function load_user_posts(){
 	// console.log(shared_functions)
 //	console.log(this.user_auth.data.id)
 
-    Post.all({where:{userid:this.user_auth.data.id}}, function (err, posts) {
+    Post.all({where:{userid:this.user_auth.data.id},limit:30}, function (err, posts) {
         if (err || !posts) {
             redirect(path_to.posts());
         } else {
