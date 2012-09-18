@@ -18,6 +18,7 @@
  schema('redis', {url: process.env.REDISTOGO_URL}, function () {
      // model definitions here
  });
+//User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
 
 
 searching: User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});

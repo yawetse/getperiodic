@@ -68,6 +68,7 @@ function get_posts_from_connected_accounts(){
 	// console.log(this.user_auth);
 	// console.log(auth_conf)
 	if(this.user_auth.loggedIn){
+		this.auth_conf.userid = this.user_auth.data.id;
 		if(this.user_auth.data.twitterAccessToken && this.user_auth.data.twitterAccessTokenSecret){
 			console.log('user has twitter')
 			this.auth_conf.has_twitter = true;
@@ -113,15 +114,18 @@ function get_posts_from_connected_accounts(){
 		}
 		if(this.user_auth.data.soundcloudAccessToken){
 			console.log('user has soundcloud')
+			// console.log(this.user_auth.data.soundcloudAccessToken)
+			// console.log(this.user_auth.data.soundcloudAccessTokenSecret)
 			this.auth_conf.has_soundcloud = true;
 			var soundcloud = require('soundcloud-js-auth');
 			this.auth_conf.soundcloud_api = soundcloud;
 			this.auth_conf.soundcloud_api.accessToken = this.user_auth.data.soundcloudAccessToken;
-			/*
-			soundcloud.apiAuthCall('GET','/me/tracks.json',null,this.user_auth.data.soundcloudAccessToken,function(err,data) {
-                console.log(data.body);
-            });
-			*/
+			
+			// soundcloud.apiAuthCall('GET','/me/tracks.json',null,this.user_auth.data.soundcloudAccessTokenSecret,function(err,data) {
+			// 	console.log("trying to get soundcloud")
+   //              console.log(data);
+   //          });
+			
 		}
 	}
 	next();
@@ -131,7 +135,7 @@ function load_user_posts(){
 	// console.log(shared_functions)
 //	console.log(this.user_auth.data.id)
 
-    Post.all({where:{userid:this.user_auth.data.id},limit:30}, function (err, posts) {
+    Post.all({where:{userid:this.user_auth.data.id},limit:90}, function (err, posts) {
         if (err || !posts) {
             redirect(path_to.posts());
         } else {

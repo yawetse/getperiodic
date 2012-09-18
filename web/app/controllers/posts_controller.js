@@ -36,16 +36,16 @@ action(function updateissues() {
         getUpdates(currentuserauthconf,'twitter',{"userid":currentuserid},{"userid":currentuserid},function(twitterdata){
             getUpdates(currentuserauthconf,'instagram',{"instagramid":currentuserinstagramid,"userid":currentuserid},{"userid":currentuserid},function(instagramdata){
                 getUpdates(currentuserauthconf,'tumblr',{"userid":currentuserid,"userid":currentuserid},{"userid":currentuserid},function(tumblrdata){
-                    getUpdates(currentuserauthconf,'soundcloud',{"userid":currentuserid,"userid":currentuserid},{"userid":currentuserid},function(tumblrdata){
-                        // console.log(d)
-                        //User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
-                        Post.all({where:{userid:currentuserid}},function(err,data){
-                            if(err){
-                                send(err)
-                            }
-                            else{
-                                send(data)
-                            }
+                    getUpdates(currentuserauthconf,'soundcloud',{"userid":currentuserid,"userid":currentuserid},{"userid":currentuserid},function(soundclouddata){
+                        getUpdates(currentuserauthconf,'foursquare',null,null,function(foursquaredata){
+                            Post.all({where:{userid:currentuserid},limit:40},function(err,data){
+                                if(err){
+                                    send(err)
+                                }
+                                else{
+                                    send(data)
+                                }
+                            });    
                         });    
                     });     
                 });  
@@ -55,16 +55,6 @@ action(function updateissues() {
 });
 
 action(function index() {
-    /*
-    getUpdates(this.auth_conf,'facebook',null,null,function(){
-        this.title = 'Posts index';
-        Post.all(function (err, posts) {
-            render({
-                posts: posts
-            });
-        });        
-    })
-    */
     this.title = 'Posts index';
     Post.all(function (err, posts) {
         render({
@@ -119,17 +109,42 @@ function loadPost() {
 }
 
 function getUpdates(auth_conf,account_type,options,params,next){
-    // console.log(next)
-
-    /*
-    add userid to auth_conf
-            
-    */
     switch(account_type){
+        case "foursquare":
+            if(auth_conf.has_foursquare){
+                auth_conf.foursquare_api.checkins('self',params, function(err,data){
+                    if(err){
+                        console.log("error getting checkins")
+                        flash('error', 'error getting checkins');
+                        next();
+                    }
+                    else{
+                        console.log("got checkins");
+                        flash('success', 'updated foursquare checkins');
+
+                        var foursquaredata = data.checkins.items,
+                            returnData =new Array(),
+                            params = {};
+                            params.userid = auth_conf.userid; 
+                        // console.log(foursquaredata)
+                        for(x in foursquaredata){
+                            returnData.push(storeUpdate(err,account_type,foursquaredata[x],params));
+                        }
+                        next(returnData);     
+                        //use bing for maps http://www.bingmapsportal.com/isdk/ajaxv7#CreateMapWithViewOptions2
+                    }
+                });
+            }
+            else{
+                console.log("user doesn't have foursquare")
+                flash('error', 'Can not get foursquare');
+                next();
+            }
+            break;
         case "soundcloud":
             if(auth_conf.has_soundcloud){
                 auth_conf.soundcloud_api.apiAuthCall('GET','/me/tracks.json',params,auth_conf.soundcloud_api.accessToken,function(err,data) {
-                    // console.log(data.body);
+                     console.log(data);
                     if(err){
                         console.log("error getting sounds")
                         flash('error', 'error getting sounds');
@@ -290,6 +305,31 @@ function getUpdates(auth_conf,account_type,options,params,next){
 function storeUpdate(err,service,data,params){
     console.info("trying to store update: "+service)
     switch(service){
+        case "foursquare":
+            var newpost = new Post;
+            newpost.title = "Foursquare checkin at "+data.venue.name;
+            newpost.content = (data.shout) ? (data.shout) : null;
+            // newpost.mediacontent = null;
+            // newpost.link = data.link
+            newpost.type = "checkin";
+
+            newpost.source = service;
+            newpost.originaldata = data;
+            newpost.originalid = data.id;
+            newpost.originaldate = new Date(data.createdAt *1000);//in epoch time
+            newpost.userid = params.userid;//rename to userid TODO:later
+            newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
+            console.log(newpost["service-userid-orginaldataid"])
+            newpost.save(newpost, function (err, post) {
+                if (err) {
+                    console.info(err)
+                    return false;
+                } else {
+                    console.info("store checkin")
+                    return post;
+                }
+            });
+            break;
         case "tumblr":
             var newpost = new Post;
             newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
@@ -364,7 +404,7 @@ function storeUpdate(err,service,data,params){
             newpost.userid = params.userid;
             newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
             console.log(newpost["service-userid-orginaldataid"]);
-
+            console.log(data)
             newpost.save(newpost, function (err, post) {
                 if (err) {
                     console.info(err)
