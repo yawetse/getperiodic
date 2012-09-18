@@ -36,6 +36,7 @@ nbproject
 
 node_modules/*
 !node_modules/railway-passport
+!node_modules/passport-soundcloud
 
 node_modudles/railway-passport/*
 !node_modules/railway-passport/lib

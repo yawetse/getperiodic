@@ -405,16 +405,18 @@ function storeUpdate(err,service,data,params){
             newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
             console.log(newpost["service-userid-orginaldataid"]);
             console.log(data)
-            newpost.save(newpost, function (err, post) {
-                if (err) {
-                    console.info(err)
-                    return false;
-                } else {
-                    console.info("store image")
-                    return post;
-                }
-            });
-            break;
+            if(data){
+                newpost.save(newpost, function (err, post) {
+                    if (err) {
+                        console.info(err)
+                        return false;
+                    } else {
+                        console.info("store image")
+                        return post;
+                    }
+                });
+            }
+            break; 
         case "instagram":
             var newpost = new Post;
             newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
@@ -486,7 +488,7 @@ function storeUpdate(err,service,data,params){
             if(data.link){
                 newpost.link = data.link;
             }
-            // console.log(newpost)
+            console.log(data)
             newpost.save(newpost, function (err, post) {
                 if (err) {
                     return false;
