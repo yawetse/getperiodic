@@ -2,6 +2,7 @@ require('ejs-ext');
 require('jugglingdb');
 require('seedjs');
 require('nodemailer');
+require('feedparser');
 require('mongodb');
 require('node-gyp');
 require('bcrypt');
@@ -21,4 +22,5 @@ require('yamljs');
 require('ntwitter');
 require('fbgraph');
 require('instapics');
+require('4sq');
 
