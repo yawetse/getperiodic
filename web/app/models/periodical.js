@@ -1,4 +1,4 @@
-Periodical.hasMany(Volume, {as: 'volumes', foreignKey: 'periodicalId'});
+Periodical.hasMany(Category, {as: 'categories', foreignKey: 'periodicalId'});
 Periodical.validatesUniquenessOf('name', {  message:"- your periodical has to be unique, think of it like a username"});
 Periodical.validatesLengthOf('title', {
   min: 2,

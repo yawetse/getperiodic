@@ -82,25 +82,21 @@ function get_posts_from_connected_accounts(){
 		if(this.user_auth.data.facebookAccessToken){
 			console.log('user has facebook')
 			this.auth_conf.has_facebook = true;
-			this.auth_conf.facebook_graph = require('fbgraph');//var ntwitter = require('ntwitter');
-			// var options = {
-			//     timeout:  3000
-			//   , pool:     { maxSockets:  Infinity }
-			//   , headers:  { connection:  "keep-alive" }
-			// };
+			this.auth_conf.facebook_graph = require('fbgraph');//var ntwitter 
 			this.auth_conf.facebook_graph.setAccessToken(this.user_auth.data.facebookAccessToken);
 		}
 		if(this.user_auth.data.instagramAccessToken){
 			console.log('user has instagram')
 			this.auth_conf.has_instagram = true;
 			var instagram = require('instapics');
-			//var ntwitter = require('ntwitter');
-			// var options = {
-			//     timeout:  3000
-			//   , pool:     { maxSockets:  Infinity }
-			//   , headers:  { connection:  "keep-alive" }
-			// };
 			this.auth_conf.instagram_api = new instagram({token:this.user_auth.data.instagramAccessToken});
+		}
+		if(this.user_auth.data.tumblrAccessToken){
+			console.log('user has tumblr')
+			this.auth_conf.has_tumblr = true;
+			var Tumblr = require('tumblr').Tumblr;
+			this.auth_conf.tumblr_api = new Tumblr(this.user_auth.data.tumblrUsername+'.tumblr.com', 
+				this.auth_conf.tumblr.apiKey);
 			// this.auth_conf.instagram_api.recent(this.user_auth.data.instagramId,null,function(err,data){
 			// 	console.log(data)
 			// })
@@ -109,20 +105,11 @@ function get_posts_from_connected_accounts(){
 			console.log('user has foursquare')
 			this.auth_conf.has_foursquare = true;
 			var foursquare = require('4sq');
-			//var ntwitter = require('ntwitter');
-			// var options = {
-			//     timeout:  3000
-			//   , pool:     { maxSockets:  Infinity }
-			//   , headers:  { connection:  "keep-alive" }
-			// };
 			this.auth_conf.foursquare_api = new foursquare({token:this.user_auth.data.foursquareAccessToken});
 			this.auth_conf.foursquare_api.checkins('self',null, function(err,data){
 				// console.log(data.checkins.items)
 				//use bing for maps http://www.bingmapsportal.com/isdk/ajaxv7#CreateMapWithViewOptions2
 			});
-			// this.auth_conf.instagram_api.recent(this.user_auth.data.instagramId,null,function(err,data){
-			// 	console.log(data)
-			// })
 		}
 		if(this.user_auth.data.soundcloudAccessToken){
 			console.log('user has soundcloud')

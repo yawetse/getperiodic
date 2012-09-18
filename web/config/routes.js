@@ -1,11 +1,11 @@
 
 exports.routes = function (map) {
     map.resources('periodicalmembers');
-    map.resources('periodicals', function (periodical) {
-	    periodical.resources('volumes');
+    map.resources('periodicals',{path:'volumes'}, function (periodical) {
+	    periodical.resources('categories');
 	});
-    map.resources('posts',{path:'issues'});
-    map.resources('volumes');
+    map.resources('posts',{path:'articles'});
+    map.resources('categories',{path:'issues'});
     map.resources('users',{path:'authors'});
 
     // Post routes

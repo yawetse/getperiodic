@@ -1,8 +1,14 @@
-<%- errorMessagesFor(volume) %>
+<%- errorMessagesFor(category) %>
 <div class="control-group">
    <%- form.label("title", false, {class: "control-label"}) %>
    <div class="controls">
        <%- form.input("title") %>
+   </div>
+</div>
+<div class="control-group">
+   <%- form.label("name", false, {class: "control-label"}) %>
+   <div class="controls">
+       <%- form.input("name") %>
    </div>
 </div>
 <div class="control-group">
@@ -18,14 +24,20 @@
    </div>
 </div>
 <div class="control-group">
+   <%- form.label("updatedAt", false, {class: "control-label"}) %>
+   <div class="controls">
+       <%- form.input("updatedAt") %>
+   </div>
+</div>
+<div class="control-group">
    <%- form.label("periodicalid", false, {class: "control-label"}) %>
    <div class="controls">
        <%- form.input("periodicalid") %>
    </div>
 </div>
 <div class="control-group">
-   <%- form.label("options", false, {class: "control-label"}) %>
+   <%- form.label("config", false, {class: "control-label"}) %>
    <div class="controls">
-       <%- form.input("options") %>
+       <%- form.input("config") %>
    </div>
 </div>

@@ -2,7 +2,8 @@
 <html lang="en">
     <head>
         <title><%= title %></title>
-        <%- stylesheet_link_tag('bootstrap', 'style', 'bootstrap-responsive') %>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <%- stylesheet_link_tag('bootstrap', 'bootstrap-responsive', 'style') %>
         <%- javascript_include_tag('http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', 'bootstrap', 'rails', 'application') %>
         <%- csrf_meta_tag() %>
     </head>
@@ -18,9 +19,9 @@
                     <a class="brand" href="<%- path_to.root() %>"><%- get_periodic_settings.name %></a>
                     <div class="nav-collapse">
                         <ul class="nav">
-                            <li><%-  link_to("Periodicals",path_to.periodicals())  %></li>
-                            <li><%-  link_to("Volumes",path_to.volumes())  %></li>
-                            <li><%-  link_to("Issues",path_to.posts())  %></li>
+                            <li><%-  link_to("Volumes",path_to.periodicals())  %></li>
+                            <li><%-  link_to("Issues",path_to.categories())  %></li>
+                            <li><%-  link_to("Articles",path_to.posts())  %></li>
                             <li><%-  link_to("Authors",path_to.users())  %></li>
                         </ul>
                         <ul class="nav pull-right">
@@ -64,7 +65,7 @@
             </div>
         </div>
     
-        <div class="container">
+        <div class="container main-content">
             <% var flash = request.flash('info').pop(); if (flash) { %>
                 <div class="alert alert-info">
                     <a class="close" data-dismiss="alert">×</a>

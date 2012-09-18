@@ -23,4 +23,5 @@ require('ntwitter');
 require('fbgraph');
 require('instapics');
 require('4sq');
+require('tumblr');
 

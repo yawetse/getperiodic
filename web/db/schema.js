@@ -87,7 +87,9 @@ var User = describe('User', function () {
     property('updatedAt', Date, {default: function () { return new Date() }});
     property('config', String);
     property('userid', String);
-});var Volume = describe('Volume', function () {
+});
+
+var Volume = describe('Volume', function () {
     property('title', String);
     property('name', String,{index:true,limit:150});
     property('description', String);
@@ -95,9 +97,19 @@ var User = describe('User', function () {
     property('updatedAt', Date, {default: function () { return new Date() }});
     property('periodicalid', Number);
     property('config', String);
-});var Periodicalmember = describe('Periodicalmember', function () {
+});
+
+var Periodicalmember = describe('Periodicalmember', function () {
     property('periodicalid', String);
     property('userid', String);
     property('membertype', String);
     property('createdAt', Date);
+});var Category = describe('Category', function () {
+    property('title', String);
+    property('name', String,{index:true,limit:150});
+    property('description', String);
+    property('createdAt', Date, {default: function () { return new Date() }});
+    property('updatedAt', Date, {default: function () { return new Date() }});
+    property('periodicalid', Number);
+    property('config', String);
 });

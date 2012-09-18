@@ -35,16 +35,18 @@ action(function updateissues() {
     getUpdates(currentuserauthconf,'facebook',{"userid":currentuserid},{"userid":currentuserid},function(facebookdata){
         getUpdates(currentuserauthconf,'twitter',{"userid":currentuserid},{"userid":currentuserid},function(twitterdata){
             getUpdates(currentuserauthconf,'instagram',{"instagramid":currentuserinstagramid,"userid":currentuserid},{"userid":currentuserid},function(instagramdata){
-                // console.log(d)
-                //User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
-                Post.all({where:{userid:currentuserid}},function(err,data){
-                    if(err){
-                        send(err)
-                    }
-                    else{
-                        send(data)
-                    }
-                });    
+                getUpdates(currentuserauthconf,'tumblr',{"userid":currentuserid,"userid":currentuserid},{"userid":currentuserid},function(tumblrdata){
+                    // console.log(d)
+                    //User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
+                    Post.all({where:{userid:currentuserid}},function(err,data){
+                        if(err){
+                            send(err)
+                        }
+                        else{
+                            send(data)
+                        }
+                    });    
+                });  
             });   
         });   
     });
@@ -147,6 +149,38 @@ function getUpdates(auth_conf,account_type,options,params,next){
                 next();
             }
             break;
+        case "tumblr":
+            if(auth_conf.has_tumblr){
+                auth_conf.tumblr_api.posts(params,
+                    function(err,data){
+                        // console.log(data)
+                        if(err){
+                            console.log("error getting tumblogs")
+                            flash('error', 'error getting tumblogs');
+                            next();
+                        }
+                        else{
+                            console.log("got tumblogs");
+                            flash('success', 'updated tumblogs feed');
+
+                            var tumblrfeeddata = data.posts,
+                                returnData =new Array(); 
+                            for(x in tumblrfeeddata){
+                                returnData.push(storeUpdate(err,account_type,tumblrfeeddata[x],params));
+                            }
+                            next(returnData);     
+                        }
+
+                    }
+                );
+
+            }
+            else{
+                console.log("user doesn't have tumblogs")
+                flash('error', 'Can not get tumblogs');
+                next();
+            }
+            break;
         case "instagram":
 
             if(auth_conf.has_instagram){
@@ -219,6 +253,66 @@ function getUpdates(auth_conf,account_type,options,params,next){
 function storeUpdate(err,service,data,params){
     console.info("trying to store update: "+service)
     switch(service){
+        case "tumblr":
+            var newpost = new Post;
+            newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
+            newpost.userid = params.userid;
+            newpost.originalid = data.id;
+            newpost.originaldate = new Date(data.date);//in epoch time
+            newpost.originaldata = data;
+            newpost.source = service;
+            newpost.type = data.type;
+            newpost.link = data.post_url;
+            switch(data.type){
+                case "answer":
+                    newpost.title = data.question;
+                    newpost.content = data.answer;
+                    break;
+                case "video":
+                    // newpost.title = data.title;
+                    newpost.content = data.caption;
+                    newpost.mediacontent = data.player;
+                    break;
+                case "audio":
+                    newpost.title = (data.id3_title) ? data.id3_title : data.soure_title;
+                    newpost.content = data.caption;
+                    newpost.mediacontent = data.player;
+                    break;
+                case "chat":
+                    newpost.content = data.body;
+                    newpost.mediacontent = data.dialog;
+                    break;
+                case "link":
+                    newpost.title = data.title;
+                    newpost.content = data.description;
+                    newpost.mediacontent = data.url;
+                    break;
+                case "quote":
+                    newpost.title = data.text;
+                    newpost.content = data.source;
+                    break;
+                case "photos":
+                    newpost.title = data.caption;
+                    newpost.mediacontent = data.photos;
+                    break;
+                case "text":
+                    newpost.title = data.title;
+                    newpost.content = data.body;
+                    break;
+                default:
+                    break;
+            }
+            // console.log(newpost["service-userid-orginaldataid"])
+            newpost.save(newpost, function (err, post) {
+                if (err) {
+                    console.info(err)
+                    return false;
+                } else {
+                    console.info("store image")
+                    return post;
+                }
+            });
+            break;
         case "instagram":
             var newpost = new Post;
             newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;

@@ -1,0 +1,9 @@
+<div class="page-header"><h1>Edit category</h1></div>
+
+<% form_for(category, {action: path_to.category(category), method: 'PUT', id: "category_form", class: 'form-horizontal'}, function (form) { %>
+    <%- partial('categories/form.ejs', {locals: {form: form, category: category}}) %>
+    <div class="form-actions">
+        <%- form.submit('<i class="icon-ok icon-white"></i> Update category', {class: 'btn btn-primary'}) %> or
+        <%- link_to('Cancel', path_to.category(category), {class: 'btn'}) %>
+    </div>
+<% });%>
