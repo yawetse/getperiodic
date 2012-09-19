@@ -46,9 +46,13 @@ function require_login(){
 }
 // function require_admin_access
 function get_periodic_settings(){
+	var YAML = require('yamljs'), 	// Load yaml file using require
+		clientside_conf = YAML.load(app.root + '/config/passport.yml')[app.set('env')];
+
 	this.get_periodic_settings = {
 		"name":"GetPeriodic", // "userauth":session.auth
-		"page_title":"GetPeriodic - Reading is fun" // "userauth":session.auth
+		"page_title":"GetPeriodic - Reading is fun", // "userauth":session.auth
+		"bing_maps_apikey": clientside_conf.bingmaps.apiKey
 	};
 	this.title = this.get_periodic_settings.page_title;
 	next();

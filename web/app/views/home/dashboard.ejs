@@ -41,6 +41,26 @@
 								<iframe width="100%" height="166" scrolling="no" frameborder="no" src="http://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F<%= currentpost.originalid %>&show_artwork=true"></iframe>
 								<%
 							}
+							else if(currentpost.source=="foursquare"){
+								%>
+								<div id="fsq-<%=  currentpost.id %>" style="height:250px; width:350px; position:relative;"></div>
+								<script type="text/javascript">
+									$(function(){
+								        map_<%= x %> = new Microsoft.Maps.Map(document.getElementById('fsq-<%=  currentpost.id %>'), {credentials: '<%- get_periodic_settings.bing_maps_apikey %>', zoom: 15, center: new Microsoft.Maps.Location(<%- currentpost.originaldata.venue.location.lat %>, <%- currentpost.originaldata.venue.location.lng %>),enableSearchLogo:false, showDashboard: false});
+								        map_<%= x %>.entities.clear(); 
+										var infoboxOptions = {title:'Infobox Title', description:'Infobox description'}; 
+										var pushpin= new Microsoft.Maps.Pushpin(map_<%= x %>.getCenter(), null); 
+
+										map_<%= x %>.entities.push(pushpin);
+ 
+									});
+								</script>
+								
+
+								<%
+							}
+
+
 							if(currentpost.mediacontent){
 								if(currentpost.source=='instagram'){
 									%><p><img width=200 src="<%=  currentpost.mediacontent %>"/></p> <%
