@@ -51,9 +51,13 @@ function get_periodic_settings(){
 
 	this.get_periodic_settings = {
 		"name":"GetPeriodic", // "userauth":session.auth
-		"page_title":"GetPeriodic - Reading is fun", // "userauth":session.auth
-		"bing_maps_apikey": clientside_conf.bingmaps.apiKey
+		"page_title":"GetPeriodic - Reading is fun" // "userauth":session.auth
+		// "bing_maps_apikey": clientside_conf.bingmaps.apiKey
 	};
+
+	if(clientside_conf.bingmaps.apiKey){
+		this.get_periodic_settings.bing_maps_apikey	= clientside_conf.bingmaps.apiKey;
+	}
 	this.title = this.get_periodic_settings.page_title;
 	next();
 }

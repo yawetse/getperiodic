@@ -20,6 +20,28 @@ action('new', function () {
     }
 });
 
+
+action('articles',function(){
+    var shared_functions = require(app.root+'/config/shared_functions.js');
+    console.log(params)
+
+    Post.all({where:{userid:params.id},limit:10,order:"originaldate",}, function (err, posts) {
+    //     if (err || !posts) {
+    //         send({err})    
+    //     } 
+    //     else {
+    //         // send({ "posts" : posts.sort(shared_functions.sort_by('originaldate', true, Date.parse))})
+    //         send({"data":"cool"})
+    //    }
+        send(posts.reverse())
+        // send(posts.sort(shared_functions.sort_by('originaldate', true, Date.parse)))
+
+     })//.bind(this)
+
+     // send({"data":"cool"})
+    // render("index")
+});
+
 action(function create() {
     var bcrypt = require('bcrypt');
     var userdata = req.body.User;

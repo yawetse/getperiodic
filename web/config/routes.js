@@ -8,6 +8,9 @@ exports.routes = function (map) {
     map.resources('categories',{path:'issues'});
     map.resources('users',{path:'authors'});
 
+    //User routs
+    map.get('users/articles/:id.:format?','users#articles');//articles/50595957b337ed65b8000086.json
+
     // Post routes
     map.get('updateissues', 'posts#updateissues');
 
