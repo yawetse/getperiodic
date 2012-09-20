@@ -189,9 +189,14 @@ action(function destroy() {
 });
 
 function loadUser() {
+    console.log(params)
     User.findOne({where:{username:params.id}}, function (err, user) {
         queryId = params.id;
-        if(queryId != null && 'number' != typeof queryId && (queryId.length != 12 && queryId.length != 24)){
+        if(user){
+            this.user = user;
+            next();
+        }
+        else if(err || (queryId != null && 'number' != typeof queryId && (queryId.length != 12 && queryId.length != 24))){
             console.log("invalid id")
             redirect(path_to.users());      
         }
@@ -207,8 +212,8 @@ function loadUser() {
             }.bind(this));
         } 
         else {
-            this.user = user;
-            next();
+            console.log("invalid id")
+            redirect(path_to.users());    
         }
     }.bind(this));
 }

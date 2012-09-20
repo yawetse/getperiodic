@@ -89,15 +89,15 @@ var User = describe('User', function () {
     property('config', String);
     property('userid', String);
     property('image', String);
-    property('private', Boolean, {default: true});
+    property('public', Boolean, {default: false});
 });
-
-
 var Periodicalmember = describe('Periodicalmember', function () {
     property('periodicalid', String);
     property('userid', String);
+    property('collaboratoruserid', String);
     property('membertype', String);
     property('createdAt', Date);
+    property('confirmed', Boolean,{default: false});
 });var Category = describe('Category', function () {
     property('title', String);
     property('name', String,{index:true,limit:150});

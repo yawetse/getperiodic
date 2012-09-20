@@ -31,7 +31,7 @@
                                     <div class="btn-group">
                                         <a href="/login" class="btn btn-info">Login</a>
                                         <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
+                                        <ul class="dropdown-menu pull-right">
                                             <li><a href="/auth/facebook">Sign in with facebook</a></li>
                                             <li><a href="/auth/twitter">Sign in with twitter</a></li>
                                             <li><a href="/login">Login</a></li>
@@ -47,7 +47,7 @@
                                         <% displayname = (user_auth.data.username) ? user_auth.data.username : "You"  %>
                                         <a href="<%- path_to.users()+'/'+user_auth.data.id %>" class="btn btn-info"><%- displayname %></a>
                                         <button class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
+                                        <ul class="dropdown-menu pull-right">
                                             <li><a href="/settings">Settings</a></li>
                                             <li><a href="/connect/accounts">Accounts</a></li>
                                             <li><%-  link_to("Profile",path_to.users()+'/'+user_auth.data.id)  %></li>

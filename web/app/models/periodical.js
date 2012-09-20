@@ -25,7 +25,8 @@ Periodical.afterCreate = function (done,obj){
 	periodicalmemberToAdd = {};
 	periodicalmemberToAdd.periodicalid = this.id;
 	periodicalmemberToAdd.userid = this.userid;
-	periodicalmemberToAdd.membertype = "admin";
+  periodicalmemberToAdd.membertype = "admin";
+  periodicalmemberToAdd.confirmed = true;
 
     Periodicalmember.create(periodicalmemberToAdd, function (err, periodical) {
         if (err) {

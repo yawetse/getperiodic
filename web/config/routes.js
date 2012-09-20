@@ -2,7 +2,7 @@
 exports.routes = function (map) {
     map.resources('periodicalmembers');
     map.resources('periodicals',{path:'volumes'}, function (periodical) {
-	    periodical.resources('categories');
+	    periodical.resources('categories',{path:'issues'});
 	});
     map.resources('posts',{path:'articles'});
     map.resources('categories',{path:'issues'});

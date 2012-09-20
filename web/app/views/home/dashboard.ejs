@@ -26,7 +26,9 @@
 			<% for(x in posts){
 				currentpost = posts[x];
 				%>
-					<div id="post-<%=  currentpost.id %>" class="well well-small span4">
+			    <!-- < %- partial('posts/post_tile.ejs', {locals: {post: currentpost}}) % > -->
+
+					<div id="post-<%=  currentpost.id %>" class="well well-small span5">
 						<h3>						
 							<%  if(currentpost.title){%><%=  currentpost.title %><%}else{
 								%><%=  currentpost.source %> update<%
@@ -63,7 +65,7 @@
 
 							if(currentpost.mediacontent){
 								if(currentpost.source=='instagram'){
-									%><p><img width=200 src="<%=  currentpost.mediacontent %>"/></p> <%
+									%><p><img width=100% src="<%=  currentpost.mediacontent %>"/></p> <%
 								}
 								else{
 									%><p><%=  currentpost.mediacontent %></p> <%	
@@ -94,6 +96,10 @@
 			  	success: function(data) {
 			    	$('#data-feed-results').html(data.toString());
 			    	console.log(data)
+			    	var f='';
+			    	for(x in data){
+			    		f+= new ejs({url:'posts/post_tile.ejs'}).render(data[x]);
+			    	}
 			  		$("#data-status-message").html(
 			  			'<div class="alert alert-info">'
 				  			+'<button type="button" class="close" data-dismiss="alert">×</button>'

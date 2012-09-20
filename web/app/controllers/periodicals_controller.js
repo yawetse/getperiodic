@@ -4,6 +4,7 @@ before(use("get_periodic_settings"));
 before(use('require_login'), {only: ['new','edit','update','destroy']});
 
 before(loadPeriodical, {only: ['show', 'edit', 'update', 'destroy']});
+before(loadUserPeriodical, {only: ['index']});
 var shared_functions = require(app.root+'/config/shared_functions.js');
 
 
@@ -28,18 +29,20 @@ action(function create() {
             });
         } else {
             flash('info', 'Periodical created');
-            redirect(path_to.periodicals());
+            redirect(path_to.periodical(periodical.id));
         }
     });
 });
 
 action(function index() {
-    this.title = 'Periodicals index';
-    Periodical.all(function (err, periodicals) {
+    if(!this.user_auth.loggedIn){
+        render("index_loggedout");
+    }
+    else{
         render({
-            periodicals: periodicals
+            periodicals: this.periodicals
         });
-    });
+    } 
 });
 
 action(function show() {
@@ -95,12 +98,49 @@ action(function destroy() {
 });
 
 function loadPeriodical() {
-    Periodical.find(params.id, function (err, periodical) {
-        if (err || !periodical) {
-            redirect(path_to.periodicals());
-        } else {
+    Periodical.findOne({where:{name:params.id.toLowerCase()}}, function (err, periodical) {
+        queryId = params.id;
+        if(periodical){
             this.periodical = periodical;
             next();
         }
+        else if(err || (queryId != null && 'number' != typeof queryId && (queryId.length != 12 && queryId.length != 24))){
+            console.log("invalid id")
+            redirect(path_to.periodicals());      
+        }
+        else if (err || !periodical) {
+            Periodical.find(params.id, function (err, periodical) {
+                if (err || !periodical) {
+                    redirect(path_to.periodicals());       
+                } 
+                else {
+                    this.periodical = periodical;
+                    next();
+                }
+            }.bind(this));
+        } 
+        else {
+            console.log("invalid id")
+            redirect(path_to.periodicals());    
+        }
     }.bind(this));
+
+}
+
+function loadUserPeriodical(){
+    if(!this.user_auth.loggedIn){
+        next();
+    }
+    else{
+        Periodical.all({where:{userid:this.user_auth.data.id}}, function (err, periodicals) {
+            // console.log(periodicals)
+            if (err || !periodicals) {
+                flash('info', 'No Volumes available');
+                next();
+            } else {
+                this.periodicals = periodicals;
+                next();
+            }
+        }.bind(this));
+    } 
 }

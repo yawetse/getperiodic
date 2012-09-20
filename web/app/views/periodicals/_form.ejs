@@ -12,14 +12,11 @@
    </div>
 </div>
 <div class="control-group">
-   <%- form.label("createdAt", false, {class: "control-label"}) %>
+   <%- form.label("public", false, {class: "control-label"}) %>
    <div class="controls">
-       <%- form.input("createdAt") %>
-   </div>
-</div>
-<div class="control-group">
-   <%- form.label("options", false, {class: "control-label"}) %>
-   <div class="controls">
-       <%- form.input("options") %>
+       <select id="periodical_privacy" name="Periodical[public]" value=0>
+          <option value=0>False</option>
+          <option value=1>True</option>
+       </select>
    </div>
 </div>
