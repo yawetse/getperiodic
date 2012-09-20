@@ -27,6 +27,8 @@ action(function create() {
 });
 
 action(function updateissues() {
+    var shared_functions = require(app.root+'/config/shared_functions.js');
+
     console.log("now in update issues")
     currentuserid = this.user_auth.data.id;
     currentuserinstagramid = this.user_auth.data.instagramId;
@@ -38,12 +40,12 @@ action(function updateissues() {
                 getUpdates(currentuserauthconf,'tumblr',{"userid":currentuserid,"userid":currentuserid},{"userid":currentuserid},function(tumblrdata){
                     getUpdates(currentuserauthconf,'soundcloud',{"userid":currentuserid,"userid":currentuserid},{"userid":currentuserid},function(soundclouddata){
                         getUpdates(currentuserauthconf,'foursquare',null,null,function(foursquaredata){
-                            Post.all({where:{userid:currentuserid},limit:40},function(err,data){
+                            Post.all({where:{userid:currentuserid},order:'-originaldate',limit:40},function(err,data){
                                 if(err){
                                     send(err)
                                 }
                                 else{
-                                    send(data)
+                                    send(data.sort(shared_functions.sort_by('originaldate', true, Date.parse)))
                                 }
                             });    
                         });    
@@ -144,7 +146,7 @@ function getUpdates(auth_conf,account_type,options,params,next){
         case "soundcloud":
             if(auth_conf.has_soundcloud){
                 auth_conf.soundcloud_api.apiAuthCall('GET','/me/tracks.json',params,auth_conf.soundcloud_api.accessToken,function(err,data) {
-                     console.log(data);
+                     // console.log(data);
                     if(err){
                         console.log("error getting sounds")
                         flash('error', 'error getting sounds');
@@ -157,7 +159,7 @@ function getUpdates(auth_conf,account_type,options,params,next){
                         var soundclouddata = data.body,
                             returnData =new Array(); 
 
-                        console.log(soundclouddata)
+                        // console.log(soundclouddata)
                         for(x in soundclouddata){
                             returnData.push(storeUpdate(err,account_type,soundclouddata[x],params));
                         }
@@ -404,7 +406,7 @@ function storeUpdate(err,service,data,params){
             newpost.userid = params.userid;
             newpost["service-userid-orginaldataid"]=service+'-'+params.userid+'-'+data.id;
             console.log(newpost["service-userid-orginaldataid"]);
-            console.log(data)
+            // console.log(data)
             if(data){
                 newpost.save(newpost, function (err, post) {
                     if (err) {
@@ -488,9 +490,12 @@ function storeUpdate(err,service,data,params){
             if(data.link){
                 newpost.link = data.link;
             }
-            console.log(data)
+            // console.log(data)
+            console.log(newpost["service-userid-orginaldataid"]);
+
             newpost.save(newpost, function (err, post) {
                 if (err) {
+                    console.info(err)
                     return false;
                 } else {
                     return post;

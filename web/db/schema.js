@@ -20,9 +20,16 @@
  });
 //User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
 
+    Post.all({where:{content:/mean/gi},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
 
 searching: User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
 */
+// Post.all({where:{userid:['50578f03d046a71dea00003e','5057919dd046a71dea00007b']},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
+
+// Post.all({where:{userid:'in 50578f03d046a71dea00003e,5057919dd046a71dea00007b'},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
+
+// Post.all({where:{userid:in:[' 50578f03d046a71dea00003e','5057919dd046a71dea00007b']},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
+
 
 var User = describe('User', function () {
     property('email', String, {index:true, limit:150});

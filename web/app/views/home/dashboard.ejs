@@ -94,12 +94,18 @@
 			$.ajax({
 			  	url: '/updateissues',
 			  	success: function(data) {
-			    	$('#data-feed-results').html(data.toString());
 			    	console.log(data)
 			    	var f='';
 			    	for(x in data){
-			    		f+= new ejs({url:'posts/post_tile.ejs'}).render(data[x]);
+			    		f+='<div class="well well-small span5">';
+			    		output = data[x];
+			    		f+= '<h2>'+output.source+' - '+output.title+'</h2>';
+			    		f+= '<p>'+output.content+'</p>';
+			    		f+= '<p>'+output.originaldate+'</p>';
+				    	f+='</div>';
 			    	}
+			    	$('#data-feed-results').html(f);
+
 			  		$("#data-status-message").html(
 			  			'<div class="alert alert-info">'
 				  			+'<button type="button" class="close" data-dismiss="alert">×</button>'

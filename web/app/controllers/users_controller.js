@@ -25,21 +25,32 @@ action('articles',function(){
     var shared_functions = require(app.root+'/config/shared_functions.js');
     console.log(params)
 
-    Post.all({where:{userid:params.id},limit:10,order:"originaldate",}, function (err, posts) {
-    //     if (err || !posts) {
-    //         send({err})    
-    //     } 
-    //     else {
-    //         // send({ "posts" : posts.sort(shared_functions.sort_by('originaldate', true, Date.parse))})
-    //         send({"data":"cool"})
-    //    }
-        send(posts.reverse())
-        // send(posts.sort(shared_functions.sort_by('originaldate', true, Date.parse)))
+    // Post.all({where:{userid:params.id},limit:10,order:"originaldate",}, function (err, posts) {
+    // //     if (err || !posts) {
+    // //         send({err})    
+    // //     } 
+    // //     else {
+    // //         // send({ "posts" : posts.sort(shared_functions.sort_by('originaldate', true, Date.parse))})
+    // //         send({"data":"cool"})
+    // //    }
+    //     send(posts.reverse())
+    //     // send(posts.sort(shared_functions.sort_by('originaldate', true, Date.parse)))
 
-     })//.bind(this)
+    //  })//.bind(this)
 
-     // send({"data":"cool"})
-    // render("index")
+    //  // send({"data":"cool"})
+    // // render("index")
+    // Post.all({limit:5,order:'-originaldate'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
+
+
+    Post.all({where:{userid:params.id},order:'originaldate DESC',limit:40},function(err,data){
+        if(err){
+            send(err)
+        }
+        else{
+            send(data)
+        }
+    }); 
 });
 
 action(function create() {

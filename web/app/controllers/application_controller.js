@@ -145,11 +145,11 @@ function load_user_posts(){
 	// console.log(shared_functions)
 //	console.log(this.user_auth.data.id)
 
-    Post.all({where:{userid:this.user_auth.data.id},limit:90}, function (err, posts) {
+    Post.all({where:{userid:this.user_auth.data.id}, order:'originaldate DESC',limit:50}, function (err, posts) {
         if (err || !posts) {
             redirect(path_to.posts());
         } else {
-            this.posts = posts.sort(shared_functions.sort_by('originaldate', true, Date.parse));
+            this.posts = posts//.sort(shared_functions.sort_by('originaldate', true, Date.parse));
             next();
         }
     }.bind(this));
