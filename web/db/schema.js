@@ -88,17 +88,10 @@ var User = describe('User', function () {
     property('updatedAt', Date, {default: function () { return new Date() }});
     property('config', String);
     property('userid', String);
+    property('image', String);
+    property('private', Boolean, {default: true});
 });
 
-var Volume = describe('Volume', function () {
-    property('title', String);
-    property('name', String,{index:true,limit:150});
-    property('description', String);
-    property('createdAt', Date, {default: function () { return new Date() }});
-    property('updatedAt', Date, {default: function () { return new Date() }});
-    property('periodicalid', Number);
-    property('config', String);
-});
 
 var Periodicalmember = describe('Periodicalmember', function () {
     property('periodicalid', String);
@@ -113,4 +106,7 @@ var Periodicalmember = describe('Periodicalmember', function () {
     property('updatedAt', Date, {default: function () { return new Date() }});
     property('periodicalid', Number);
     property('config', String);
+    property('version', Number);
+    property('private', Boolean, {default: false});
+
 });
