@@ -20,16 +20,18 @@
  });
 //User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
 
-    Post.all({where:{content:/mean/gi},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
+//50595957b337ed65b8000086
+//505bfcf9ab419c1f59000001
+
+As far as i remember when you are using mongoose/mongo adapter you can use {where: {userid: {in: [1,2,3]}}} query. If it doesn't work try '$in' instead of 'in'.    
 
 searching: User.all({where:{email:/Yaw/gi}},function(err,data){console.log(data)});
+
+multiple ids: Post.all({where:{ userid: {in:['50595957b337ed65b8000086','505bfcf9ab419c1f59000001']}},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
 */
-// Post.all({where:{userid:['50578f03d046a71dea00003e','5057919dd046a71dea00007b']},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
 
-// Post.all({where:{userid:'in 50578f03d046a71dea00003e,5057919dd046a71dea00007b'},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
 
-// Post.all({where:{userid:in:[' 50578f03d046a71dea00003e','5057919dd046a71dea00007b']},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
-
+Post.all({where:{content:/mean/gi},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
 
 var User = describe('User', function () {
     property('email', String, {index:true, limit:150});
