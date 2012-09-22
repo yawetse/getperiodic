@@ -31,7 +31,7 @@ multiple ids: Post.all({where:{ userid: {in:['50595957b337ed65b8000086','505bfcf
 */
 
 
-Post.all({where:{content:/mean/gi},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
+// Post.all({where:{content:/mean/gi},limit:5,order:'originaldate DESC'},function(err,data){for(x in data){console.log(data[x].title+', '+data[x].content)}})
 
 var User = describe('User', function () {
     property('email', String, {index:true, limit:150});

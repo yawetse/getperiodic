@@ -112,13 +112,33 @@ action(function create() {
 });
 
 action(function index() {
-    this.title = 'Users index';
+    this.title = 'GetPeriodic - Collaborate';
     User.all(function (err, users) {
-        render({
+        render("search",{
             users: users
         });
     });
 });
+
+action(function search() {
+    // var shared_functions = require(app.root+'/config/shared_functions.js');
+
+    // console.log(body.search_text)
+    // console.log(params.search_text)
+
+    searchQuery = new RegExp(shared_functions.strip_tags(body.search_text),"gi");
+
+    User.all({where:{username:searchQuery,email:searchQuery},limit:5},function(err,users){
+        if(err){
+            send(err)
+        }
+        else{
+            send(users);
+        }
+        // this.users = users
+    });
+});
+
 
 action(function updateinfo() {
     // this.title = 'Complete your user registration';

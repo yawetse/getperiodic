@@ -27,7 +27,12 @@ module.exports = {
         }
     },
     make_user_name_nice: function(username){
-        return username.replace(/[^a-z0-9]/gi,'-').toLowerCase();
+      if(username){
+        return username.replace(/[^a-z0-9]/gi,'-').toLowerCase();        
+      }
+      else{
+        return false;
+      }
     },
     sort_by : function(field, reverse, primer){
 
@@ -48,5 +53,15 @@ module.exports = {
            return 0;
 
        }
+    },
+    strip_tags: function(textinput){
+      // cleantext = textinput.replace(/(<([^>]+)>)/ig,"");
+      // return cleantext;
+      if(textinput){
+        return textinput.replace(/[^a-z0-9]/gi,'-').toLowerCase();
+      }
+      else{
+        return false
+      }
     }
 }

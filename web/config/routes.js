@@ -10,6 +10,7 @@ exports.routes = function (map) {
 
     //User routs
     map.get('users/articles/:id.:format?','users#articles');//articles/50595957b337ed65b8000086.json
+    map.post('users/search.:format?','users#search')
 
     // Post routes
     map.get('updateissues', 'posts#updateissues');
