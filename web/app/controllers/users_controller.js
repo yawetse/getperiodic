@@ -113,11 +113,18 @@ action(function create() {
 
 action(function index() {
     this.title = 'GetPeriodic - Collaborate';
-    User.all(function (err, users) {
-        render("search",{
-            users: users
+
+
+    if(this.user_auth.loggedIn){
+        User.all(function(err,users){
+            render("search",{
+                users: users
+            });
         });
-    });
+    }
+    else{
+        render();
+    }
 });
 
 action(function search() {
@@ -139,6 +146,26 @@ action(function search() {
     });
 });
 
+action(function collaborate(){
+    if(this.user_auth.loggedIn){
+        var newconnection = new Userconnection;
+        newconnection.userid = this.user_auth.data.id;
+        newconnection.collaboratoruserid = params.id
+        newconnection.save(newconnection, function (err, connection) {
+            if (err) {
+                // console.info(err)
+                send({"result":"error","data":err});
+            } else {
+                send({"result":"success","data":connection});
+            }
+        });
+    }
+    else{
+        send({"result":"error","data":"must be logged in"});
+    }
+
+
+});
 
 action(function updateinfo() {
     // this.title = 'Complete your user registration';

@@ -37,7 +37,7 @@ var User = describe('User', function () {
     property('email', String, {index:true, limit:150});
     property('firstname', String);
     property('lastname', String);
-    property('username', String);
+    property('username', String, {index:true, limit:150});
     property('password', String);
     property('createdAt', Date, {default: function () { return new Date() }});
     property('updatedAt', Date, {default: function () { return new Date() }});
@@ -105,7 +105,13 @@ var Periodicalmember = describe('Periodicalmember', function () {
     property('userid', String);
     property('collaboratoruserid', String);
     property('membertype', String);
-    property('createdAt', Date);
+    property('createdAt', Date, {default: function () { return new Date() }});
+    property('confirmed', Boolean,{default: false});
+});
+var Userconnection = describe('Userconnection', function () {
+    property('userid', String);
+    property('collaboratoruserid', String);
+    property('createdAt', Date, {default: function () { return new Date() }});
     property('confirmed', Boolean,{default: false});
 });var Category = describe('Category', function () {
     property('title', String);

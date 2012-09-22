@@ -4,61 +4,15 @@
 
 <div class="row">
     <div class="span12">
-        <form class="form">
-            <div class="input-prepend">
-                <button class="btn" type="button">Search</button>
-                <input class="span2" id="appendedInputButton" size="16" type="text">
-            </div>
-        </form>
+        <p class="lead">Once you sign in, you can start to collaborate with friends on your volume. </p>
     </div>
 </div>
 
 <div class="row">
     <div class="span12">
-        <% if (users.length > 0) { %>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>Image</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% users.forEach(function (user) { %>
-                        <tr>
-                            <td>
-                                <strong><%- link_to(user.id, path_to.user(user)) %></strong>
-                            </td>
-                            <td>
-                                <strong><%- link_to(user.email, path_to.user(user)) %></strong>                                  
-                                <span class="label label-info"><%= user.username %></span>
-<!--                                 <span class="label"><%= user.password %></span>
- -->                            </td>
-                            <td>
-                                <strong><%- link_to('<img src="'+user.image+'"/>', path_to.user(user)) %></strong>
-                            </td>
-                            <td>
-                                <span class="label">tw - <%= user.twitterUsername %></span>
-                                <span class="label">tw - <%= user.twitterId %></span>
-                                <span class="label">fb - <%= user.facebookId %></span>
-                                <span class="label">fb - <%= user.facebookUsername %></span>
-
-                                </td>
-                            <td>
-                                <%- link_to('<i class="icon-edit"></i> Edit', path_to.edit_user(user), {class: 'btn btn-mini'}) %>
-                                <%- link_to('<i class="icon-remove icon-white"></i> Delete', path_to.user(user), {class: 'btn btn-mini btn-danger', method: 'delete', remote: true, jsonp: '(function (u) {location.href = u;})'}) %>        
-                            </td>
-                        </tr>
-                    <% }); %>        
-                </tbody>
-            </table>
-        <% } else { %>
-            <p class="alert alert-block alert-info">
-                <strong>No users were found.</strong> 
-            </p>
-        <% } %>
+        
+        <p class="alert alert-block alert-info">
+            <strong>No users were found.</strong> 
+        </p>
     </div>
 </div>

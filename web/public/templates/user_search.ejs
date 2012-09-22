@@ -1,0 +1,12 @@
+<% 
+console.log("data") 
+console.log(data) 
+
+for(x in data){
+  %>
+  <div><%= data[x].username %> - <%=data[x].email%> </div>
+
+  <%
+}
+
+%>

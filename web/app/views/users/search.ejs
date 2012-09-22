@@ -8,74 +8,92 @@
             <div class="input-prepend">
                 <label for="appendedInputButton"></label>
                 <button class="btn" id="username-search-button" type="button">Search</button>
-                <input class="span2" id="appendedInputButton" name="search_text" size="16" type="text"  class="required " min-length="4" ><span id="search-error" class="label label-important"></span>
+                <input class="span2" id="appendedInputButton" name="search_text" size="16" type="text"  class="required " min-length="4" >
+                <span id="search-error" style="display:none;" class="label label-important"></span>
             </div>
         <% }
         ); %>
         <script type="text/javascript">
             $(function(){
+                
                 $("#username-search-button").click(function(e){
-                    if($("#appendedInputButton").val().length > 3){
-                        $("#search-error").html(" ")
-                        $.post($('#username-search').attr('action')+'.json?',$('#username-search').serialize(),function(data){
-                            console.log(data)
-                        }); 
-                    }
-                    else{
-                        $("#search-error").html("must be atleast 4 character") 
-                    }
+                   processSearchSubmit(e);
+                }); 
+                $("#username-search").submit(function(e){
+                   processSearchSubmit(e);
+                   return false;
                 }); 
             });
+
+            function processSearchSubmit(e){
+                if($("#appendedInputButton").val().length > 3){
+                    $("#search-error").html(" ")
+                    $.post($('#username-search').attr('action')+'.json?',$('#username-search').serialize(),function(users){
+
+                        htmldata = new EJS({url:"/templates/user_search.ejs"}).render({"data":users});
+                        $("#user-search-resutls").html(htmldata);
+                    }); 
+                }
+                else{
+                    $("#search-error").html("must be atleast 4 character").show(); 
+                }
+            }
+            function connectUser(data){
+                console.log(data)
+            }
         </script>
     </div>
 </div>
 
 <div class="row">
-    <div class="span12">
+    <div class="span12" id="user-search-resutls">
+
         <% if (users.length > 0) { %>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>Image</th>
-                        <th>Description</th>
+                        <th colspan="2">Author</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% users.forEach(function (user) { %>
-                        <tr>
-                            <td>
-                                <strong><%- link_to(user.id, path_to.user(user)) %></strong>
-                            </td>
-                            <td>
-                                <strong><%- link_to(user.email, path_to.user(user)) %></strong>                                  
-                                <span class="label label-info"><%= user.username %></span>
-<!--                                 <span class="label"><%= user.password %></span>
- -->                            </td>
-                            <td>
-                                <strong><%- link_to('<img src="'+user.image+'"/>', path_to.user(user)) %></strong>
-                            </td>
-                            <td>
-                                <span class="label">tw - <%= user.twitterUsername %></span>
-                                <span class="label">tw - <%= user.twitterId %></span>
-                                <span class="label">fb - <%= user.facebookId %></span>
-                                <span class="label">fb - <%= user.facebookUsername %></span>
-
+                    <% users.forEach(function (user) {
+                        if(user_auth.data.username == user.username){
+                            %>
+                            <%
+                        }
+              
+                        else{
+                           %>
+                            <tr>
+                                <td>
+                                    <%
+                                    if(!user.image){%>
+                                        <img src="http://lorempixel.com/g/100/100/" />
+                                    <%}
+                                    else{ %>
+                                    <%- link_to('<img style="float:left;" src="'+user.image+'"/>', path_to.user(user)) %>
+                                    <% } %>
                                 </td>
-                            <td>
-                                <%- link_to('<i class="icon-edit"></i> Edit', path_to.edit_user(user), {class: 'btn btn-mini'}) %>
-                                <%- link_to('<i class="icon-remove icon-white"></i> Delete', path_to.user(user), {class: 'btn btn-mini btn-danger', method: 'delete', remote: true, jsonp: '(function (u) {location.href = u;})'}) %>        
-                            </td>
-                        </tr>
-                    <% }); %>        
+                                <td>
+                                    <strong><%- link_to(user.username, path_to.user(user)) %></strong>
+                                    <p><%= user.firstname %> <%= user.lastname %></p>
+                                    <p class="small"><%= user.description %></p>
+                                </td>
+                                <td>
+                                    <%- link_to('<i class="icon-edit icon-white"></i> Connect', '/users/collaborate/'+user.id ,{remote: true,jsonp: 'connectUser',class: 'btn btn-mini btn-success'}) %>
+                                    <%- link_to('<i class="icon-remove icon-white"></i> Delete', path_to.user(user), {class: 'btn btn-mini btn-danger', method: 'delete', remote: true, jsonp: '(function (u) {location.href = u;})'}) %>        
+                                </td>
+                            </tr>
+                            <%  
+                        }
+                    }); %>        
                 </tbody>
             </table>
         <% } else { %>
-            <p class="alert alert-block alert-info">
-                <strong>No users were found.</strong> 
-            </p>
+        <p class="alert alert-block alert-info">
+            <strong>Search for authors to collaborate on volumes</strong> 
+        </p>
         <% } %>
     </div>
 </div>
