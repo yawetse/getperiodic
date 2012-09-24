@@ -110,7 +110,9 @@ var Periodicalmember = describe('Periodicalmember', function () {
 });
 var Userconnection = describe('Userconnection', function () {
     property('userid', String);
+    property('username', String);
     property('collaboratoruserid', String);
+    property('collaboratorusername', String);
     property('createdAt', Date, {default: function () { return new Date() }});
     property('confirmed', Boolean,{default: false});
 });var Category = describe('Category', function () {

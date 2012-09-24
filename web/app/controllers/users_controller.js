@@ -2,6 +2,8 @@ load('application');
 before(use("get_periodic_settings"));
 before(use('user_auth', {except: ['update']}));
 before(loadUser, {only: ['show', 'edit', 'update', 'destroy']});
+before(loadAllUserConnections, {only: ['index','search']});
+before(loadAllUsers, {only: ['index']});
 before(loadSelfLoggedInUser,{only:['updateinfo','completeregistration']})
 before(use('require_login'), {only: ['edit']});
 
@@ -116,55 +118,206 @@ action(function index() {
 
 
     if(this.user_auth.loggedIn){
-        User.all(function(err,users){
-            render("search",{
-                users: users
-            });
-        });
+        render("search");
     }
     else{
         render();
     }
 });
 
+function loadAllUsers(){
+    var connections = this.userconnections;
+    var followers = this.followers;
+    var connections_array = new Array();
+     // console.log(followers)
+    for(x in connections){
+        connection = connections[x];
+        // console.log(connection.collaboratoruserid)
+        connections_array.push(connection.collaboratorusername)
+    }
+    for(x in followers){
+        follower = followers[x];
+        // console.log(follower.username)
+        // console.log(connection.collaboratoruserid)
+        connections_array.push(follower.username)
+    }
+    // console.log(connections_array)
+    if(connections_array.length>0){
+        User.all({ 
+                where: {
+                    username: {
+                        in: connections_array
+                    }
+                },
+                limit: 100
+            },
+            function(err,users){
+                // console.log(users)
+                this.users = users;
+                next();
+            }.bind(this)
+        ); 
+    }
+    else{
+        next();
+    }
+}
+
+function loadAllUserConnections(){
+    console.log
+    if(this.user_auth.loggedIn){
+        userauthvar= this.user_auth;
+        //first get the connections you sent
+        Userconnection.all({where:{userid:userauthvar.data.id}},function(err,following){
+            this.userconnections= following;
+            //then get your connections you've recieved (followers)
+            Userconnection.all({where:{collaboratoruserid:userauthvar.data.id}},
+                function(err,followers){
+                    // console.log(followers)
+                    this.followers= followers;
+                    next();
+                }.bind(this)
+            );
+        }.bind(this));
+    }
+    else{
+        next();
+    }
+}
+
 action(function search() {
     // var shared_functions = require(app.root+'/config/shared_functions.js');
 
     // console.log(body.search_text)
     // console.log(params.search_text)
-
     searchQuery = new RegExp(shared_functions.strip_tags(body.search_text),"gi");
+    // console.log("searchQuery")
+    // console.log(searchQuery)
+    var users_array = new Array();
 
-    User.all({where:{username:searchQuery,email:searchQuery},limit:5},function(err,users){
+    User.all({where:{email:searchQuery},limit:5},function(err,users){
         if(err){
             send(err)
         }
         else{
-            send(users);
+            // console.log(users)
+            if(users){
+                for(x in users){
+                    users_array.push(users[x]);
+                }
+            }
+            User.all({where:{username:searchQuery}},function(err,users_usernames){
+                if(err){
+                    send(err)
+                }
+                else{
+                    for(x in users_usernames){
+                        //do not dupilcate users
+                        var is_a_duplicate = false;
+                        for (y in users_array){
+                            if(users_usernames[x].username==users_array[y].username){
+                                is_a_duplicate = true;
+                            }
+                        }
+                        if(!is_a_duplicate){
+                            users_array.push(users_usernames[x]);
+                        }
+                    }
+                    send({"users":users_array,"userconnections":this.userconnections});
+
+                }
+            }.bind(this));
         }
         // this.users = users
-    });
+    }.bind(this));
 });
 
 action(function collaborate(){
+    console.log(params)
     if(this.user_auth.loggedIn){
-        var newconnection = new Userconnection;
-        newconnection.userid = this.user_auth.data.id;
-        newconnection.collaboratoruserid = params.id
-        newconnection.save(newconnection, function (err, connection) {
-            if (err) {
-                // console.info(err)
-                send({"result":"error","data":err});
-            } else {
-                send({"result":"success","data":connection});
-            }
-        });
+        Userconnection.findOne(
+            {where: {
+                userid:this.user_auth.data.id, 
+                collaboratoruserid: params.id
+                }
+            },
+            function(err,collaboration){
+                // console.log(params)
+                // console.log(this.user_auth.data.id)
+                if (err) {
+                    // console.info(err)
+                    send({"result":"error","data":err});
+                } 
+                else if(collaboration){
+                    console.info("already request/connection")
+                    send({"result":"error","data":"already request/connection"});
+                }
+                else {
+                    console.log("new request, create one")
+                    var newconnection = {};
+                    newconnection.userid = this.user_auth.data.id;
+                    newconnection.username = this.user_auth.data.username;
+                    newconnection.collaboratoruserid = params.id;
+                    newconnection.collaboratorusername = params.username;
+                    newconnection.confirmed = false;
+                    Userconnection.create(newconnection, function (err, connection) {
+                        if (err) {
+                            // console.info(err)
+                            send({"result":"error","data":err});
+                        } else {
+                            send({"result":"success","data":connection});
+                        }
+                    });
+                }
+            }.bind(this)
+        );
     }
     else{
         send({"result":"error","data":"must be logged in"});
     }
+});
 
-
+action(function collaborate_remove(){
+    if(this.user_auth.loggedIn){
+        Userconnection.findOne(
+            {where: {
+                userid:this.user_auth.data.id, 
+                collaboratoruserid: params.id
+                }
+            },
+            function(err,collaboration){
+                // console.log(params)
+                // console.log(this.user_auth.data.id)
+                if (err) {
+                    console.info(err)
+                    send({"result":"error","data":err});
+                } 
+                else{
+                    if(collaboration){
+                        collaboration.destroy(function(err){
+                            if (err) {
+                                console.info("ERROR removed request/connection")
+                                console.info(err)
+                                send({"result":"error","data":err});
+                            } 
+                            else {
+                                console.info("removed request/connection")
+                                send({"result":"success","data":"removed connection"});
+                            }
+                        });
+                    }
+                    else{
+                        console.info("ERROR removed request/connection - invalid conneciton");
+                        send({"result":"error","data":"ERROR removed request/connection - invalid conneciton"});
+                    }
+                    
+                }
+            }.bind(this)
+        );
+    }
+    else{
+        send({"result":"error","data":"must be logged in"});
+    }
 });
 
 action(function updateinfo() {

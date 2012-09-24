@@ -58,7 +58,7 @@ module.exports = {
       // cleantext = textinput.replace(/(<([^>]+)>)/ig,"");
       // return cleantext;
       if(textinput){
-        return textinput.replace(/[^a-z0-9]/gi,'-').toLowerCase();
+        return textinput.replace(/[^a-z0-9@._]/gi,'-').toLowerCase();
       }
       else{
         return false
