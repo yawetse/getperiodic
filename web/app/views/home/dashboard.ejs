@@ -3,19 +3,17 @@
 		<div class="page-header"><h1>Welcome <%- user_auth.data.username %></h1></div>
 	</div>
 
-	<div class="span12">
+<!-- 	<div class="span12">
 		<div class="page-header"><h2>Getting Started</h2></div>
-	</div>
+	</div> -->
 	<div class="span12">
-		<div><h3>1# Create Your First Periodical</h3></div>
 		<div>
-			<div><h3>2# Add sources for your issues by connecting accounts</h3></div>
+			<p class="lead">Here's a list of your connected accounts</p>
 			<div style="padding:5px 40px">
 	    		<%- partial('connect/connected_accounts.ejs', {locals: {display:"normal"}}) %>	
 			</div>
-    	</div>
-		<div><h3>3# Create your first Volume to customise your periodical</h3></div>
-		<div><h3>4# Add collaborators</h3></div>
+		</div>
+		<div><p class="">below are you most recent cached issues, remember by default they are private, to expose your feeds, you can create a public volume</p></div>
 	</div>
 	<div class="span12">
 		<div class="page-header"><h2>Recent Issues <button class=" btn btn-large btn-primary" id="update-posts" data-loading-text="Updating">Update Feeds</button> </h2>
@@ -23,67 +21,76 @@
 		<div><%- paginate(posts)%></div>
 		<div id="data-status-message"></div>
 		<div id="data-feed-results">
-			<% for(x in posts){
-				currentpost = posts[x];
+			<% 
+			if(posts.length > 0){
+				for(x in posts){
+					currentpost = posts[x];
+					%>
+				    <!-- < %- partial('posts/post_tile.ejs', {locals: {post: currentpost}}) % > -->
+
+						<div id="post-<%=  currentpost.id %>" class="well well-small span5">
+							<h3>						
+								<%  if(currentpost.title){%><%=  currentpost.title %><%}else{
+									%><%=  currentpost.source %> update<%
+
+								} %>
+							</h3>
+							<%  if(currentpost.content){%><p><%=  currentpost.content %></p> <%} %>
+
+							<%  
+								if(currentpost.source=="soundcloud"){
+									%>
+									<iframe width="100%" height="166" scrolling="no" frameborder="no" src="http://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F<%= currentpost.originalid %>&show_artwork=true"></iframe>
+									<%
+								}
+								else if(currentpost.source=="foursquare" && get_periodic_settings.bing_maps_apikey){
+									%>
+									<div id="fsq-<%=  currentpost.id %>" style="height:250px; width:100%px; position:relative;"></div>
+									<script type="text/javascript">
+										$(function(){
+									        map_<%= x %> = new Microsoft.Maps.Map(document.getElementById('fsq-<%=  currentpost.id %>'), {credentials: '<%- get_periodic_settings.bing_maps_apikey %>', zoom: 15, center: new Microsoft.Maps.Location(<%- currentpost.originaldata.venue.location.lat %>, <%- currentpost.originaldata.venue.location.lng %>),enableSearchLogo:false, showDashboard: false});
+									        map_<%= x %>.entities.clear(); 
+											var infoboxOptions = {title:'Infobox Title', description:'Infobox description'}; 
+											var pushpin= new Microsoft.Maps.Pushpin(map_<%= x %>.getCenter(), null); 
+
+											map_<%= x %>.entities.push(pushpin);
+	 
+										});
+									</script>
+									
+
+									<%
+								}
+								if(currentpost.mediacontent){
+									if(currentpost.source=='instagram'){
+										%><p><img width=100% src="<%=  currentpost.mediacontent %>"/></p> <%
+									}
+									else{
+										%><p><%=  currentpost.mediacontent %></p> <%	
+									}
+								} %>
+							<ul class="breadcrumb">
+								<%if(currentpost.link){%>
+								<li><a href="<%=  currentpost.link %>">Link</a> <span class="divider">/</span></li>
+
+								<%}
+								%>
+								<li class="active"> <%=  currentpost.source %> <span class="divider">/</span> </li>
+								<li class="active">
+	 <span class="label"><%=  currentpost.originaldate %></span></li>
+							</ul>
+						</div>
+					<%
+				}
+			}
+			else{
 				%>
-			    <!-- < %- partial('posts/post_tile.ejs', {locals: {post: currentpost}}) % > -->
-
-					<div id="post-<%=  currentpost.id %>" class="well well-small span5">
-						<h3>						
-							<%  if(currentpost.title){%><%=  currentpost.title %><%}else{
-								%><%=  currentpost.source %> update<%
-
-							} %>
-						</h3>
-						<%  if(currentpost.content){%><p><%=  currentpost.content %></p> <%} %>
-
-						<%  
-							if(currentpost.source=="soundcloud"){
-								%>
-								<iframe width="100%" height="166" scrolling="no" frameborder="no" src="http://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F<%= currentpost.originalid %>&show_artwork=true"></iframe>
-								<%
-							}
-							else if(currentpost.source=="foursquare" && get_periodic_settings.bing_maps_apikey){
-								%>
-								<div id="fsq-<%=  currentpost.id %>" style="height:250px; width:100%px; position:relative;"></div>
-								<script type="text/javascript">
-									$(function(){
-								        map_<%= x %> = new Microsoft.Maps.Map(document.getElementById('fsq-<%=  currentpost.id %>'), {credentials: '<%- get_periodic_settings.bing_maps_apikey %>', zoom: 15, center: new Microsoft.Maps.Location(<%- currentpost.originaldata.venue.location.lat %>, <%- currentpost.originaldata.venue.location.lng %>),enableSearchLogo:false, showDashboard: false});
-								        map_<%= x %>.entities.clear(); 
-										var infoboxOptions = {title:'Infobox Title', description:'Infobox description'}; 
-										var pushpin= new Microsoft.Maps.Pushpin(map_<%= x %>.getCenter(), null); 
-
-										map_<%= x %>.entities.push(pushpin);
- 
-									});
-								</script>
-								
-
-								<%
-							}
-
-
-							if(currentpost.mediacontent){
-								if(currentpost.source=='instagram'){
-									%><p><img width=100% src="<%=  currentpost.mediacontent %>"/></p> <%
-								}
-								else{
-									%><p><%=  currentpost.mediacontent %></p> <%	
-								}
-							} %>
-						<ul class="breadcrumb">
-							<%if(currentpost.link){%>
-							<li><a href="<%=  currentpost.link %>">Link</a> <span class="divider">/</span></li>
-
-							<%}
-							%>
-							<li class="active"> <%=  currentpost.source %> <span class="divider">/</span> </li>
-							<li class="active">
- <span class="label"><%=  currentpost.originaldate %></span></li>
-						</ul>
+					<div class="alert alert-block">
+						you currently have no imported issues
 					</div>
 				<%
-			} %>
+			}
+			%>
 		</div>
 	</div>
 </div>
