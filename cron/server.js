@@ -1,6 +1,13 @@
-var https = require('https');
-var mongoose = require('mongoose')
-  , db = mongoose.createConnection('localhost', 'test');
+//NODE_ENV=production node server.js
+
+var https = require('https'),
+    YAML = require('yamljs'),
+    application_env = (process.env.NODE_ENV) ? process.env.NODE_ENV : 'development',
+    application_auth_conf = YAML.load('../web/config/passport.yml')[application_env],
+    mongoose = require('mongoose'),
+    db = mongoose.createConnection('localhost', 'test');
+
+console.log(process.env)
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
@@ -24,22 +31,25 @@ User.find(function (err, users) {
 })
 
 
+console.log(application_auth_conf)
+process.exit(code=0)
+
 ///me/tracks.json?oauth_token=API-TOKEN
 //The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
 //     console.log(res)
 
 //  });
-get_soundcloud_data("API-TOKEN",function(err,soundcloud){
-    if(err){
-        process.exit(1);
-    }
-    else{   
-        for(x in soundcloud){
-            console.log(soundcloud[x].permalink_url)
-        }
-        process.exit(code=0)        
-    }
-});
+// get_soundcloud_data("API-TOKEN",function(err,soundcloud){
+//     if(err){
+//         process.exit(1);
+//     }
+//     else{   
+//         for(x in soundcloud){
+//             console.log(soundcloud[x].permalink_url)
+//         }
+//         process.exit(code=0)        
+//     }
+// });
 
 
 
