@@ -46,4 +46,8 @@ node_modudles/railway-passport/lib
 
 #app environment settings
 config/database.json
+config/database.json--please--config
 config/passport.yml
+config/passport.yml--please--config
+config/site_config.yml
+config/site_config.yml--please--config
