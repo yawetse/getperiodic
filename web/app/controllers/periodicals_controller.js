@@ -101,8 +101,14 @@ function loadPeriodical() {
     Periodical.findOne({where:{name:params.id.toLowerCase()}}, function (err, periodical) {
         queryId = params.id;
         if(periodical){
-            this.periodical = periodical;
-            next();
+            if(checkPrivatePeriodicalAccess(periodical)){
+                this.periodical = periodical;
+                next(); 
+            }
+            else{
+                flash('error', 'user: Access denied');
+                redirect(path_to.periodicals());       
+            }
         }
         else if(err || (queryId != null && 'number' != typeof queryId && (queryId.length != 12 && queryId.length != 24))){
             console.log("invalid id")
@@ -114,8 +120,14 @@ function loadPeriodical() {
                     redirect(path_to.periodicals());       
                 } 
                 else {
-                    this.periodical = periodical;
-                    next();
+                    if(checkPrivatePeriodicalAccess(periodical)){
+                        this.periodical = periodical;
+                        next(); 
+                    }
+                    else{
+                        flash('error', 'user: Access denied');
+                        redirect(path_to.periodicals());       
+                    }
                 }
             }.bind(this));
         } 
@@ -125,6 +137,26 @@ function loadPeriodical() {
         }
     }.bind(this));
 
+
+    function checkPrivatePeriodicalAccess(periodical){
+        // console.log()
+        if(periodical.public){
+            return true; 
+        }
+        else{
+            if(this.user_auth){
+                if(shared_functions.require_admin_user_access(this.user_auth, periodical.userid,true)){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                return false;
+            }
+        }
+    }
 }
 
 function loadUserPeriodical(){
