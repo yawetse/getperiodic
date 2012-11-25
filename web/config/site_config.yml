@@ -1,7 +1,7 @@
 development:
   baseURL: 'http://local.getperiodic.com/'
   application_settings:
-    name: "GetPeriodic"
+    name: "GetPeriodic - local"
     company: "GetPeriodic"
     company_link: "http://getperiodic.com"
     page_title: "GetPeriodic - Reading is fun"
@@ -9,7 +9,7 @@ development:
 test:
   baseURL: 'https://test.getperiodic.com'
   application_settings:
-    name: "GetPeriodic"
+    name: "GetPeriodic - test"
     company: "GetPeriodic"
     company_link: "http://getperiodic.com"
     page_title: "GetPeriodic - Reading is fun"
