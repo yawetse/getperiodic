@@ -3,6 +3,11 @@
   , "url":      "mongodb://localhost/getperiodic"
   }
 , "test":
-  { "driver":   "memory"
+  { "driver":   "mongodb"
+  , "url":      "mongodb://localhost/getperiodic"
+  }
+, "production":
+  { "driver":   "mongodb"
+  , "url":      "mongodb://localhost/getperiodic"
   }
 }
