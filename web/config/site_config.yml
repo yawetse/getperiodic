@@ -1,24 +1,24 @@
 development:
-  baseURL: 'http://local.getperiodic.com/'
+  baseURL: 'http://local.periodic.condenast.com/'
   application_settings:
-    name: "GetPeriodic - local"
-    company: "GetPeriodic"
-    company_link: "http://getperiodic.com"
-    page_title: "GetPeriodic - Reading is fun"
-    info_email: "info@getperiodic.com"
+    name: "Condé Nast Periodic - local"
+    company: "Condé Nast"
+    company_link: "http://condenast.com"
+    page_title: "Condé Nast Periodic"
+    info_email: "periodic@condenast.com"
 test:
-  baseURL: 'https://test.getperiodic.com'
+  baseURL: 'https://test.periodic.condenast.com'
   application_settings:
-    name: "GetPeriodic - test"
-    company: "GetPeriodic"
-    company_link: "http://getperiodic.com"
-    page_title: "GetPeriodic - Reading is fun"
-    info_email: "info@getperiodic.com"
+    name: "Condé Nast Periodic - test"
+    company: "Condé Nast"
+    company_link: "http://condenast.com"
+    page_title: "Condé Nast Periodic"
+    info_email: "periodic@condenast.com"
 production:
-  baseURL: 'https://getperiodic.com'
+  baseURL: 'https://periodic.condenast.com'
   application_settings:
-    name: "GetPeriodic"
-    company: "GetPeriodic"
-    company_link: "http://getperiodic.com"
-    page_title: "GetPeriodic - Reading is fun"
-    info_email: "info@getperiodic.com"
+    name: "Condé Nast Periodic"
+    company: "Condé Nast"
+    company_link: "http://condenast.com"
+    page_title: "Condé Nast Periodic"
+    info_email: "periodic@condenast.com"
