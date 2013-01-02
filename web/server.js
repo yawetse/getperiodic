@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var app = module.exports = require('railway').createServer();
+var app = module.exports = require('compound').createServer();
 
 if (!module.parent) {
     var port = process.env.PORT || 3000

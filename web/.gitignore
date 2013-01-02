@@ -36,13 +36,18 @@ nbproject
 
 node_modules/*
 !node_modules/railway-passport
+!node_modules/compound-passport
 !node_modules/passport-soundcloud
 
 node_modudles/railway-passport/*
 !node_modules/railway-passport/lib
+node_modudles/compound-passport/*
+!node_modules/compound-passport/lib
 
 node_modudles/railway-passport/lib
 !node_modules/railway-passport/lib/strategies
+node_modudles/compound-passport/lib
+!node_modules/compound-passport/lib/strategies
 
 #app environment settings
 config/database.json
