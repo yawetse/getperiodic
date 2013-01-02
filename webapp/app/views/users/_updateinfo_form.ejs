@@ -1,0 +1,39 @@
+<%- errorMessagesFor(user) %>
+<% //console.log(user)%>
+<div class="control-group">
+   <%- form.label("email", false, {class: "control-label"}) %>
+   <div class="controls">
+      <% if(!user.email){%>
+        <%- form.input("email") %>
+      <% }
+      else{%>
+        <%- form.input("email", {value: user.email}) %>
+        <%
+      } %>
+
+   </div>
+</div>
+<div class="control-group">
+   <%- form.label("username", false, {class: "control-label"}) %>
+   <div class="controls">
+      <% if(!user.username){%>
+        <%- form.input("username") %>
+      <% }
+      else{%>
+        <%- form.input("username", {value: user.username}) %>
+        <%
+      } %>
+   </div>
+</div>
+<div class="control-group">
+   <%- form.label("firstname", false, {class: "control-label"}) %>
+   <div class="controls">
+       <%- form.input("firstname") %> <span class="label">optional</span>
+   </div>
+</div>
+<div class="control-group">
+   <%- form.label("lastname", false, {class: "control-label"}) %>
+   <div class="controls">
+       <%- form.input("lastname") %> <span class="label">optional</span>
+   </div>
+</div>

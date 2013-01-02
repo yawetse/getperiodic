@@ -1,0 +1,144 @@
+<div class="page-header">
+    <h1>Collaborators <small>search for collabors to build better volumes</small></h1>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <% 
+        form_tag( { class: 'form form-inline', action: "/users/search", id: 'username-search', name: 'username-search', method:'POST'},function(form){ %>
+            <div class="input-prepend">
+                <label for="appendedInputButton"></label>
+                <button class="btn" id="username-search-button" type="button">Search</button>
+                <input class="span2" id="appendedInputButton" name="search_text" size="16" type="text"  class="required " min-length="4" >
+                <span id="search-error" style="display:none;" class="label label-important"></span>
+            </div>
+        <% }
+        ); %>
+        <script type="text/javascript">
+            var userconnections = <%- JSON.stringify(userconnections) %>;
+
+            $(function(){
+                
+                $("#username-search-button").click(function(e){
+                   processSearchSubmit(e);
+                }); 
+                $("#username-search").submit(function(e){
+                   processSearchSubmit(e);
+                   return false;
+                }); 
+            });
+
+            function processSearchSubmit(e){
+                if($("#appendedInputButton").val().length > 2){
+                    $("#search-error").html(" ")
+                    $.post($('#username-search').attr('action')+'.json?',$('#username-search').serialize(),function(data){
+
+                        // htmldata = new EJS({url:"/templates/user_search.ejs"}).render({"data":users});
+                        // console.log(users)
+                        htmldata = new EJS({url:"/templates/user_search.ejs"}).render({
+                            "users":data.users,
+                            "username":"<%= user_auth.data.username %>",
+                            "userconnections":data.userconnections
+                        });
+                        $("#user-search-resutls").html(htmldata);
+                    }); 
+                }
+                else{
+                    $("#search-error").html("must be atleast 3 character").show(); 
+                }
+            }
+            function connectUser(data){
+                console.log(data)
+            }
+            function removeConnectUser(data){
+                console.log(data)
+            }
+        </script>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12" id="user-search-resutls">
+
+        <% 
+            //console.log(users)
+
+            if (users.length > 0) { %>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th colspan="2">Author</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(function (user) {
+                        //console.log(user.username)
+                        if(user_auth.data.username == user.username){
+                            %>
+                            <%
+                        }
+              
+                        else{
+                           %>
+                            <tr>
+                                <td>
+                                    <%
+                                    if(!user.image){%>
+                                        <img src="http://lorempixel.com/g/100/100/" />
+                                    <%}
+                                    else{ %>
+                                    <%- link_to('<img style="float:left;" src="'+user.image+'"/>', path_to.user(user)) %>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <strong><%- link_to(user.username, path_to.user(user)) %></strong>
+                                    <p><%= user.firstname %> <%= user.lastname %></p>
+                                    <p class="small"><%= user.description %></p>
+                                </td>
+                                <td>
+                                    <%
+                                        var connection_exists = false;
+                                        var connection_isconfirmed = false;
+                                        for(x in userconnections){
+                                            userconnection = userconnections[x];
+                                            if(user.id == userconnection.collaboratoruserid){
+                                                connection_exists = true;
+                                                connection_isconfirmed = userconnection.confirmed;
+                                            }
+                                            // else{
+                                            //     connection_exists = false;
+                                            //     connection_isconfirmed = false;
+                                            // }
+                                        }
+
+                                        if(connection_exists){
+                                            if(connection_isconfirmed){
+                                                %>collaborating<%
+                                            }
+                                            else{%>Access Granted<%}
+                                        }
+                                        else{
+                                            %>
+                                                <%- link_to('<i class="icon-edit icon-white"></i> Connect', '/users/collaborate/'+user.id+'/'+user.username ,{remote: true,jsonp: 'connectUser',class: 'btn btn-mini btn-success'}) %>
+                                            <%
+                                        }
+                                    %>
+                                    
+                                    
+                                    <%- link_to('<i class="icon-edit icon-white"></i> Remove', '/users/collaborate_remove/'+user.id ,{remote: true,jsonp: 'removeConnectUser',class: 'btn btn-mini btn-danger'}) %>
+
+                                </td>
+                            </tr>
+                            <%  
+                        }
+                    }); %>        
+                </tbody>
+            </table>
+        <% } else { %>
+        <p class="alert alert-block alert-info">
+            <strong>Search for authors to collaborate on volumes</strong> 
+        </p>
+        <% } %>
+    </div>
+</div>

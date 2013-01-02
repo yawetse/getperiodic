@@ -1,0 +1,24 @@
+development:
+  baseURL: 'http://local.periodic.condenast.com/'
+  application_settings:
+    name: "Condé Nast Periodic - local"
+    company: "Condé Nast"
+    company_link: "http://condenast.com"
+    page_title: "Condé Nast Periodic"
+    info_email: "periodic@condenast.com"
+test:
+  baseURL: 'https://test.periodic.condenast.com'
+  application_settings:
+    name: "Condé Nast Periodic - test"
+    company: "Condé Nast"
+    company_link: "http://condenast.com"
+    page_title: "Condé Nast Periodic"
+    info_email: "periodic@condenast.com"
+production:
+  baseURL: 'https://periodic.condenast.com'
+  application_settings:
+    name: "Condé Nast Periodic"
+    company: "Condé Nast"
+    company_link: "http://condenast.com"
+    page_title: "Condé Nast Periodic"
+    info_email: "periodic@condenast.com"

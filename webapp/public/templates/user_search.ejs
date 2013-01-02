@@ -1,0 +1,57 @@
+<% 
+console.log(userconnections)
+
+if (users.length > 0) { %>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th colspan="2">Author</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (x in users) {
+              user = users[x];
+                if(username == user.username){
+                    %>
+                    <tr>
+                      <td colspan="3">
+                        <a href="authors/<%= user.username %>">your profile</a>
+                      </td>
+                    </tr>
+                    <%
+                }
+      
+                else{
+                   %>
+                    <tr>
+                        <td>
+                            <%
+                            if(!user.image){%>
+                                <img src="http://lorempixel.com/g/100/100/" />
+                            <%}
+                            else{ %>
+                            <%= link_to('<img style="float:left;" src="'+user.image+'"/>', '/authors/'+user.id ) %>
+                            <% } %>
+                        </td>
+                        <td>
+                            <strong><%= link_to(user.username, '/authors/'+user.id) %></strong>
+                            <p><%= user.firstname %> <%= user.lastname %></p>
+                            <p class="small"><%= user.description %></p>
+                        </td>
+                        <td>
+                            <%= link_to('<i class="icon-edit icon-white"></i> Connect', '/users/collaborate/'+user.id+'/'+user.username ,{"data-remote": true,"data-jsonp": 'connectUser',class: 'btn btn-mini btn-success'}) %>
+                                 
+                        </td>
+                    </tr>
+                    <%  
+                }
+            } %>        
+        </tbody>
+    </table>
+<% } 
+else { %>
+<p class="alert alert-block alert-info">
+    <strong>No search results</strong> 
+</p>
+<% } %>

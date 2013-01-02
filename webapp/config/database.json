@@ -1,0 +1,13 @@
+{ "development":
+  { "driver":   "mongodb"
+  , "url":      "mongodb://localhost/getperiodic"
+  }
+, "test":
+  { "driver":   "mongodb"
+  , "url":      "mongodb://localhost/getperiodic"
+  }
+, "production":
+  { "driver":   "mongodb"
+  , "url":      "mongodb://localhost/getperiodic"
+  }
+}

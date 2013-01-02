@@ -1,0 +1,10 @@
+.main-content{
+	margin-top:60px;
+}
+
+@media (max-width: 979px){
+	.navbar-fixed-top {	
+		position: fixed;
+		margin-bottom: 18px;
+	}
+}

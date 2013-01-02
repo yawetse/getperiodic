@@ -1,0 +1,60 @@
+development:
+  baseURL: 'http://local.periodic.condenast.com/'
+  twitter:
+    apiKey: "GqHJUlC3KhvcljxwQG6qg"
+    secret: "l8DR04YL1Nlk3gOynVYrYGU5qGhePo1lgfFGSnRHQ"
+    failureRedirect: "/login"
+  facebook:
+    apiKey: "403428496395673"
+    secret: "341ca0419f6f691fb306b540efe40b15"
+    failureRedirect: "/login"
+  foursquare:
+    apiKey: "needkey"
+    secret: "needsecret"
+    failureRedirect: "/login"
+  bingmaps:
+    apiKey: "Ao_FLzqclO0lxd_7a1hDSvw8nG9zWYdfD8sGmQGfJpXR7Xd5Xb2uN_wpgBqkFibS"
+    website: "needsite"
+    type: "trial"
+  local:
+    usernameField: "email"
+test:
+  baseURL: 'https://test.periodic.condenast.com'
+  twitter:
+    apiKey: "cZBUVkURaNIzS1DO8DErpw"
+    secret: "olXNZWInc1vyPfZKa0cmLVHtrTK1burtIpK0YKIq4"
+    failureRedirect: "/login"
+  facebook:
+    apiKey: "153827121429236"
+    secret: "813d230d9c0cc7a9f0629fd3b72123d6"
+    failureRedirect: "/login"
+  foursquare:
+    apiKey: "needkey"
+    secret: "needsecret"
+    failureRedirect: "/login"
+  bingmaps:
+    apiKey: "ArU5dDsXLhzm795T6F4fQNvcg79ufs9wEIfaiWZBlTaqwyxLFGAv_i1YwgLqcIIr"
+    website: "needsite"
+    type: "trial"
+  local:
+    usernameField: "email"
+production:
+  baseURL: 'https://periodic.condenast.com/'
+  twitter:
+    apiKey: "W4E1rOxgeLfRyno5UCqgmg"
+    secret: "G6f4cmIU1av6SKDUqircgaS79QJHNwMGwMBaAM8Fo"
+    failureRedirect: "/login"
+  facebook:
+    apiKey: "125418277609011"
+    secret: "0842b22efa0c24a7816848d5b7ff8bf3"
+    failureRedirect: "/login"
+  foursquare:
+    apiKey: "needkey"
+    secret: "needsecret"
+    failureRedirect: "/login"
+  bingmaps:
+    apiKey: "AnEOJ9c68ek6ARTRrDC2FbZC_IiiFpG4ytjFIHvwtn3IerDMGCtevPrKILQAReKF"
+    website: "needweb"
+    type: "trial"
+  local:
+    usernameField: "email"

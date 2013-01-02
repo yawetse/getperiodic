@@ -1,0 +1,9 @@
+<div class="page-header"><h1>Edit periodicalmember</h1></div>
+
+<% form_for(periodicalmember, {action: path_to.periodicalmember(periodicalmember), method: 'PUT', id: "periodicalmember_form", class: 'form-horizontal'}, function (form) { %>
+    <%- partial('periodicalmembers/form.ejs', {locals: {form: form, periodicalmember: periodicalmember}}) %>
+    <div class="form-actions">
+        <%- form.submit('<i class="icon-ok icon-white"></i> Update periodicalmember', {class: 'btn btn-primary'}) %> or
+        <%- link_to('Cancel', path_to.periodicalmember(periodicalmember), {class: 'btn'}) %>
+    </div>
+<% });%>

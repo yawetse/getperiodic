@@ -1,0 +1,37 @@
+<div class="page-header">
+    <h1>Details of user</h1>
+</div>
+
+<div><%= user.id %></div>
+<div><%= user_auth.loggenIn %></div>
+
+<table class="table table-bordered">
+    <tbody>
+        <tr><th>email</th><td><%= user.email %></td></tr>
+        <tr><th>firstname</th><td><%= user.firstname %></td></tr>
+        <tr><th>lastname</th><td><%= user.lastname %></td></tr>
+        <tr><th>username</th><td><%= user.username %></td></tr>
+        <tr><th>password</th><td><%= user.password %></td></tr>
+        <tr><th>createdAt</th><td><%= user.createdAt %></td></tr>
+        <tr><th>updatedAt</th><td><%= user.updatedAt %></td></tr>
+        <tr><th>activated</th><td><%= user.activated %></td></tr>
+        <tr><th>accounttype</th><td><%= user.accounttype %></td></tr>
+        <tr><th>description</th><td><%= user.description %></td></tr>
+        <tr><th>image</th><td><%= user.image %></td></tr>
+        <tr><th>image_https</th><td><%= user.image_https %></td></tr>
+        <tr><th>twitterAccessToken</th><td><%= user.twitterAccessToken %></td></tr>
+        <tr><th>twitterAccessTokenSecret</th><td><%= user.twitterAccessTokenSecret %></td></tr>
+        <tr><th>twitterUsername</th><td><%= user.twitterUsername %></td></tr>
+        <tr><th>twitterId</th><td><%= user.twitterId %></td></tr>
+        <tr><th>facebookAccessToken</th><td><%= user.facebookAccessToken %></td></tr>
+        <tr><th>facebookUsername</th><td><%= user.facebookUsername %></td></tr>
+        <tr><th>facebookId</th><td><%= user.facebookId %></td></tr>    
+    </tbody>
+</table>
+
+<div class="well">
+    <%- link_to('<i class="icon-edit icon-white"></i> Edit', path_to.edit_user(user), {class: 'btn btn-primary'}) %>
+    <%- link_to('<i class="icon-remove icon-white"></i> Delete', path_to.user(user), {class: 'btn btn-danger', method: 'delete', remote: true, jsonp: '(function (u) { location.href = u; })'}) %>
+    or
+    <%- link_to('Back to index', path_to.users()) %>
+</div>
